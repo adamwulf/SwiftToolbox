@@ -13,4 +13,8 @@ extension CGPoint {
         let y2 = (point.y - y) * (point.y - y)
         return sqrt(x2 + y2)
     }
+
+    static public func - (lhs: CGPoint, rhs: CGPoint) -> CGVector {
+        return CGVector(dx: lhs.x - rhs.x, dy: lhs.y - rhs.y)
+    }
 }
