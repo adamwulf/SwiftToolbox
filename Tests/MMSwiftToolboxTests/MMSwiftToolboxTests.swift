@@ -19,6 +19,6 @@ final class MMSwiftToolboxTests: XCTestCase {
 
     static var allTests = [
         ("testExample", testExample),
-        ("testCGRect", testCGRect),
+        ("testCGRect", testCGRect)
     ]
 }
