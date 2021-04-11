@@ -17,4 +17,8 @@ extension CGPoint {
     static public func - (lhs: CGPoint, rhs: CGPoint) -> CGVector {
         return CGVector(dx: lhs.x - rhs.x, dy: lhs.y - rhs.y)
     }
+
+    static public func + (lhs: CGPoint, rhs: CGVector) -> CGPoint {
+        return CGPoint(x: lhs.x + rhs.dx, y: lhs.y + rhs.dy)
+    }
 }

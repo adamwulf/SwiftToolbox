@@ -27,6 +27,12 @@ final class MMSwiftToolboxTests: XCTestCase {
         XCTAssertEqual(vec, CGVector(dx: 3, dy: 1))
     }
 
+    func testCGPointStep() {
+        let p = CGPoint(x: 1, y: 2)
+        let vec = CGVector(dx: 4, dy: 3)
+        XCTAssertEqual(p + vec, CGPoint(x: 5, y: 5))
+    }
+
     func testCGVectorTheta() {
         XCTAssertEqual(CGVector(dx: 1, dy: 0).theta, 0)
         XCTAssertEqual(CGVector(dx: 0, dy: 1).theta, CGFloat.pi / 2)
