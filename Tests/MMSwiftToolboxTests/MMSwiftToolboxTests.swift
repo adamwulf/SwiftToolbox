@@ -2,6 +2,9 @@ import XCTest
 @testable import MMSwiftToolbox
 
 final class MMSwiftToolboxTests: XCTestCase {
+
+    static let epsilon: CGFloat = 0.00000000001
+
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
@@ -36,9 +39,19 @@ final class MMSwiftToolboxTests: XCTestCase {
         XCTAssertEqual(CGVector(dx: 1, dy: 1).magnitude, sqrt(2))
     }
 
+    func testCGVectorNormalized() {
+        XCTAssertEqual(CGVector(dx: 10, dy: 0).normalized.magnitude, 1)
+        XCTAssertEqual(CGVector(dx: 10, dy: 4).normalized.magnitude, 1)
+        XCTAssertEqual(CGVector(dx: 10, dy: 0).normalize(to: 3).magnitude, 3)
+        XCTAssertEqual(CGVector(dx: 10, dy: 4).normalize(to: 3).magnitude, 3, accuracy: Self.epsilon)
+    }
+
     static var allTests = [
         ("testExample", testExample),
         ("testCGRect", testCGRect),
-        ("testCGPointDiff", testCGPointDiff)
+        ("testCGPointDiff", testCGPointDiff),
+        ("testCGVectorTheta", testCGVectorTheta),
+        ("testCGVectorMag", testCGVectorMag),
+        ("testCGVectorNormalized", testCGVectorNormalized)
     ]
 }
