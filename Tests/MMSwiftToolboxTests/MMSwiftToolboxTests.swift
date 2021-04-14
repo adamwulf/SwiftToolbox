@@ -51,11 +51,14 @@ final class MMSwiftToolboxTests: XCTestCase {
         XCTAssertEqual(CGVector(dx: 10, dy: 0).normalize(to: 3).magnitude, 3)
         XCTAssertEqual(CGVector(dx: 10, dy: 4).normalize(to: 3).magnitude, 3, accuracy: Self.epsilon)
     }
+}
 
+extension MMSwiftToolboxTests {
     static var allTests = [
         ("testExample", testExample),
         ("testCGRect", testCGRect),
         ("testCGPointDiff", testCGPointDiff),
+        ("testCGPointStep", testCGPointStep),
         ("testCGVectorTheta", testCGVectorTheta),
         ("testCGVectorMag", testCGVectorMag),
         ("testCGVectorNormalized", testCGVectorNormalized)
