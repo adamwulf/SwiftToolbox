@@ -51,6 +51,15 @@ final class MMSwiftToolboxTests: XCTestCase {
         XCTAssertEqual(CGVector(dx: 10, dy: 0).normalize(to: 3).magnitude, 3)
         XCTAssertEqual(CGVector(dx: 10, dy: 4).normalize(to: 3).magnitude, 3, accuracy: Self.epsilon)
     }
+
+    func testStringTrim() {
+        let str = "{ asdf }"
+        let trimmed = "asdf"
+        let trim1 = str.trimmingCharacters(in: CharacterSet(charactersIn: "{ }"))
+        let trim2 = str.trimmingCharacters(in: CharacterSet(charactersIn: "{ }"))
+        XCTAssertEqual(trim1, trimmed)
+        XCTAssertEqual(trim2, trimmed)
+    }
 }
 
 extension MMSwiftToolboxTests {
