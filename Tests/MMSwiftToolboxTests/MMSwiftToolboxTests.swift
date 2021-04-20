@@ -60,6 +60,20 @@ final class MMSwiftToolboxTests: XCTestCase {
         XCTAssertEqual(trim1, trimmed)
         XCTAssertEqual(trim2, trimmed)
     }
+
+    func testSubstringRanges() {
+        let str = """
+                  asdf asdf asdf qwer qwer
+                  pounqjkr;njg asdf rnw
+                  """
+        let ranges = str.ranges(of: "asdf")
+
+        XCTAssertEqual(ranges.count, 4)
+        XCTAssertEqual(ranges.first!.lowerBound, str.index(str.startIndex, offsetBy: 0))
+        XCTAssertEqual(ranges.first!.upperBound, str.index(str.startIndex, offsetBy: 4))
+        XCTAssertEqual(ranges.last!.lowerBound, str.index(str.startIndex, offsetBy: 38))
+        XCTAssertEqual(ranges.last!.upperBound, str.index(str.startIndex, offsetBy: 42))
+    }
 }
 
 extension MMSwiftToolboxTests {
