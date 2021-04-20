@@ -11,7 +11,11 @@ extension String {
     func trimmingCharacters(in chars: String) -> String {
         return self.trimmingCharacters(in: CharacterSet(charactersIn: chars))
     }
+}
 
+// https://gist.github.com/BetterProgramming/ac4f639c915ef0560fcca5208d9456f9#file-firstoccur-swift
+// https://gist.github.com/BetterProgramming/37e2019711c00ac678600a878e2d879f#file-transformhelper-swift
+extension String {
     func indices(of occurrence: String) -> [Int] {
         var indices = [Int]()
         var position = startIndex
