@@ -11,6 +11,14 @@ extension String {
     func trimmingCharacters(in chars: String) -> String {
         return self.trimmingCharacters(in: CharacterSet(charactersIn: chars))
     }
+
+    func countOccurrences<Target>(of string: Target) -> Int where Target: StringProtocol {
+        return components(separatedBy: string).count - 1
+    }
+
+    func countOccurrences(of chars: CharacterSet) -> Int {
+        return components(separatedBy: chars).count - 1
+    }
 }
 
 // https://gist.github.com/BetterProgramming/ac4f639c915ef0560fcca5208d9456f9#file-firstoccur-swift

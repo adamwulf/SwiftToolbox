@@ -74,6 +74,16 @@ final class MMSwiftToolboxTests: XCTestCase {
         XCTAssertEqual(ranges.last!.lowerBound, str.index(str.startIndex, offsetBy: 38))
         XCTAssertEqual(ranges.last!.upperBound, str.index(str.startIndex, offsetBy: 42))
     }
+
+    func testSubstringCount() {
+        let str = """
+                  asdf asdf asdf qwer qwer
+                  pounqjkr;njg asdf rnw
+                  """
+        XCTAssertEqual(str.countOccurrences(of: "asdf"), 4)
+        XCTAssertEqual(str.countOccurrences(of: "\n"), 1)
+        XCTAssertEqual(str.countOccurrences(of: CharacterSet(charactersIn: "a\n")), 5)
+    }
 }
 
 extension MMSwiftToolboxTests {
