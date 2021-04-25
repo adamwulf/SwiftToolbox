@@ -5,13 +5,6 @@ final class MMSwiftToolboxTests: XCTestCase {
 
     static let epsilon: CGFloat = 0.00000000001
 
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(MMSwiftToolbox().text, "Hello, World!")
-    }
-
     func testCGRect() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
@@ -88,7 +81,6 @@ final class MMSwiftToolboxTests: XCTestCase {
 
 extension MMSwiftToolboxTests {
     static var allTests = [
-        ("testExample", testExample),
         ("testCGRect", testCGRect),
         ("testCGPointDiff", testCGPointDiff),
         ("testCGPointStep", testCGPointStep),
