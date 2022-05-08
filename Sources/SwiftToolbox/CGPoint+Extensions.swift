@@ -32,8 +32,24 @@ extension CGPoint {
         return CGVector(dx: lhs.x - rhs.x, dy: lhs.y - rhs.y)
     }
 
+    static public func + (lhs: CGPoint, rhs: CGPoint) -> CGVector {
+        return CGVector(dx: lhs.x + rhs.x, dy: lhs.y + rhs.y)
+    }
+
     static public func + (lhs: CGPoint, rhs: CGVector) -> CGPoint {
         return CGPoint(x: lhs.x + rhs.dx, y: lhs.y + rhs.dy)
+    }
+
+    static public func - (lhs: CGPoint, rhs: CGVector) -> CGPoint {
+        return CGPoint(x: lhs.x - rhs.dx, y: lhs.y - rhs.dy)
+    }
+
+    static public func + (lhs: CGPoint, rhs: CGSize) -> CGPoint {
+        return CGPoint(x: lhs.x + rhs.width, y: lhs.y + rhs.height)
+    }
+
+    static public func - (lhs: CGPoint, rhs: CGSize) -> CGPoint {
+        return CGPoint(x: lhs.x - rhs.width, y: lhs.y - rhs.height)
     }
 
     // MARK: - Scale
