@@ -26,11 +26,31 @@ extension CGPoint {
         return sqrt(x2 + y2)
     }
 
+    // MARK: - Translate
+
     static public func - (lhs: CGPoint, rhs: CGPoint) -> CGVector {
         return CGVector(dx: lhs.x - rhs.x, dy: lhs.y - rhs.y)
     }
 
     static public func + (lhs: CGPoint, rhs: CGVector) -> CGPoint {
         return CGPoint(x: lhs.x + rhs.dx, y: lhs.y + rhs.dy)
+    }
+
+    // MARK: - Scale
+
+    static public func * (lhs: CGPoint, rhs: Int) -> CGPoint {
+        return CGPoint(x: lhs.x * CGFloat(rhs), y: lhs.y * CGFloat(rhs))
+    }
+
+    static public func / (lhs: CGPoint, rhs: Int) -> CGPoint {
+        return CGPoint(x: lhs.x / CGFloat(rhs), y: lhs.y / CGFloat(rhs))
+    }
+
+    static public func * (lhs: CGPoint, rhs: CGFloat) -> CGPoint {
+        return CGPoint(x: lhs.x * rhs, y: lhs.y * rhs)
+    }
+
+    static public func / (lhs: CGPoint, rhs: CGFloat) -> CGPoint {
+        return CGPoint(x: lhs.x / rhs, y: lhs.y / rhs)
     }
 }

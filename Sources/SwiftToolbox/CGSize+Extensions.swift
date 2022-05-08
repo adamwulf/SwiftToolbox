@@ -19,4 +19,23 @@ extension CGSize {
     public init(_ width: Int, _ height: Int) {
         self.init(width: width, height: height)
     }
+
+    // MARK: - Scale
+
+    static public func * (lhs: CGSize, rhs: Int) -> CGSize {
+        return CGSize(width: lhs.width * CGFloat(rhs), height: lhs.height * CGFloat(rhs))
+    }
+
+    static public func / (lhs: CGSize, rhs: Int) -> CGSize {
+        return CGSize(width: lhs.width / CGFloat(rhs), height: lhs.height / CGFloat(rhs))
+    }
+
+    static public func * (lhs: CGSize, rhs: CGFloat) -> CGSize {
+        return CGSize(width: lhs.width * rhs, height: lhs.height * rhs)
+    }
+
+    static public func / (lhs: CGSize, rhs: CGFloat) -> CGSize {
+        return CGSize(width: lhs.width / rhs, height: lhs.height / rhs)
+    }
+
 }
