@@ -20,6 +20,16 @@ extension CGSize {
         self.init(width: width, height: height)
     }
 
+    // MARK: - Min / Max
+
+    public var min: CGFloat {
+        return Swift.min(width, height)
+    }
+
+    public var max: CGFloat {
+        return Swift.max(width, height)
+    }
+
     // MARK: - Scale
 
     static public func * (lhs: CGSize, rhs: Int) -> CGSize {
