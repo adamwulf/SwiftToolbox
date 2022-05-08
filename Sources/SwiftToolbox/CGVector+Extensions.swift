@@ -8,6 +8,9 @@
 import CoreGraphics
 
 extension CGVector {
+    public init(_ dx: CGFloat, _ dy: CGFloat) {
+        self.init(dx: dx, dy: dy)
+    }
 
     // MARK: - Min / Max
 
