@@ -8,6 +8,18 @@
 import CoreGraphics
 
 extension CGPoint {
+    public init(_ x: CGFloat, _ y: CGFloat) {
+        self.init(x: x, y: y)
+    }
+
+    public init(_ x: Double, _ y: Double) {
+        self.init(x: x, y: y)
+    }
+
+    public init(_ x: Int, _ y: Int) {
+        self.init(x: x, y: y)
+    }
+
     public func distance(to point: CGPoint) -> CGFloat {
         let x2 = (point.x - x) * (point.x - x)
         let y2 = (point.y - y) * (point.y - y)
