@@ -9,6 +9,18 @@ import CoreGraphics
 
 extension CGVector {
 
+    // MARK: - Min / Max
+
+    public var min: CGFloat {
+        return Swift.min(dx, dy)
+    }
+
+    public var max: CGFloat {
+        return Swift.max(dx, dy)
+    }
+
+    // MARK: - Vectors
+
     public var normalized: CGVector {
         return normalize()
     }

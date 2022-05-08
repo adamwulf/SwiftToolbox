@@ -52,6 +52,16 @@ extension CGPoint {
         return CGPoint(x: lhs.x - rhs.width, y: lhs.y - rhs.height)
     }
 
+    // MARK: - Min / Max
+
+    public var min: CGFloat {
+        return Swift.min(x, y)
+    }
+
+    public var max: CGFloat {
+        return Swift.max(x, y)
+    }
+
     // MARK: - Scale
 
     static public func * (lhs: CGPoint, rhs: Int) -> CGPoint {
