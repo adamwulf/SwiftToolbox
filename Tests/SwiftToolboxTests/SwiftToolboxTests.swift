@@ -1,7 +1,7 @@
 import XCTest
-@testable import MMSwiftToolbox
+@testable import SwiftToolbox
 
-final class MMSwiftToolboxTests: XCTestCase {
+final class SwiftToolboxTests: XCTestCase {
 
     static let epsilon: CGFloat = 0.00000000001
 
@@ -79,7 +79,7 @@ final class MMSwiftToolboxTests: XCTestCase {
     }
 }
 
-extension MMSwiftToolboxTests {
+extension SwiftToolboxTests {
     static var allTests = [
         ("testCGRect", testCGRect),
         ("testCGPointDiff", testCGPointDiff),

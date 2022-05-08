@@ -1,7 +1,7 @@
 import XCTest
 
-import MMSwiftToolboxTests
+import SwiftToolboxTests
 
 var tests = [XCTestCaseEntry]()
-tests += MMSwiftToolboxTests.allTests()
+tests += SwiftToolboxTests.allTests()
 XCTMain(tests)
