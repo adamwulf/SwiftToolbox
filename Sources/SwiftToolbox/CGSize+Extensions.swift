@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 extension CGSize {
     public init(_ width: CGFloat, _ height: CGFloat) {
