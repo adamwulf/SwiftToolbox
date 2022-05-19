@@ -44,6 +44,6 @@ extension String {
 
     public func ranges(of searchString: String) -> [Range<String.Index>] {
         let _indices = indices(of: searchString)
-        return _indices.map({ index(startIndex, offsetBy: $0)..<index(startIndex, offsetBy: $0+searchString.count) })
+        return _indices.map({ index(startIndex, offsetBy: $0)..<index(startIndex, offsetBy: $0 + searchString.count) })
     }
 }
