@@ -13,10 +13,24 @@ public extension Array where Element == UInt8 {
     }
 }
 public extension Array where Element: Equatable {
-    // Remove first collection element that is equal to the given `object`:
+    /// Remove all instances of element that are equal to the given `object`:
     mutating func remove(object: Element) {
         while let index = firstIndex(of: object) {
             remove(at: index)
         }
+    }
+}
+
+public extension Array {
+    /// Remove element from end of array, if exists
+    mutating func pop() -> Element? {
+        guard !isEmpty else { return nil }
+        return removeLast()
+    }
+
+    /// Remove element from start of array, if exists
+    mutating func dequeue() -> Element? {
+        guard !isEmpty else { return nil }
+        return removeFirst()
     }
 }

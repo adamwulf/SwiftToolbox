@@ -26,6 +26,22 @@ extension CGPoint {
         return sqrt(x2 + y2)
     }
 
+    // MARK: - Convert
+
+    public var asVector: CGVector {
+        return CGVector(dx: x, dy: y)
+    }
+
+    // MARK: - Min / Max
+
+    public var min: CGFloat {
+        return Swift.min(x, y)
+    }
+
+    public var max: CGFloat {
+        return Swift.max(x, y)
+    }
+
     // MARK: - Translate
 
     static public func - (lhs: CGPoint, rhs: CGPoint) -> CGVector {
@@ -52,16 +68,6 @@ extension CGPoint {
         return CGPoint(x: lhs.x - rhs.width, y: lhs.y - rhs.height)
     }
 
-    // MARK: - Min / Max
-
-    public var min: CGFloat {
-        return Swift.min(x, y)
-    }
-
-    public var max: CGFloat {
-        return Swift.max(x, y)
-    }
-
     // MARK: - Scale
 
     static public func * (lhs: CGPoint, rhs: Int) -> CGPoint {
@@ -78,5 +84,23 @@ extension CGPoint {
 
     static public func / (lhs: CGPoint, rhs: CGFloat) -> CGPoint {
         return CGPoint(x: lhs.x / rhs, y: lhs.y / rhs)
+    }
+
+    // Reversed lhs/rhs
+
+    static func * (lhs: Int, rhs: CGPoint) -> CGPoint {
+        return rhs * CGFloat(lhs)
+    }
+
+    static func / (lhs: Int, rhs: CGPoint) -> CGPoint {
+        return CGFloat(lhs) / rhs
+    }
+
+    static func * (lhs: CGFloat, rhs: CGPoint) -> CGPoint {
+        return rhs * lhs
+    }
+
+    static func / (lhs: CGFloat, rhs: CGPoint) -> CGPoint {
+        return CGPoint(x: lhs / rhs.x, y: lhs / rhs.y)
     }
 }
