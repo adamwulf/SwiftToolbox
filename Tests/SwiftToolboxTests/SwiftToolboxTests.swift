@@ -77,6 +77,18 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(str.countOccurrences(of: "\n"), 1)
         XCTAssertEqual(str.countOccurrences(of: CharacterSet(charactersIn: "a\n")), 5)
     }
+
+    func testArray() {
+        struct Fumble: Equatable {
+            let bump: Int
+            let jump: Double
+        }
+        var arr: [Fumble] = [Fumble(bump: 1, jump: 20), Fumble(bump: 1, jump: 20), Fumble(bump: 4, jump: 20)]
+
+        XCTAssertEqual(arr.count, 3)
+        arr.remove(object: Fumble(bump: 1, jump: 20))
+        XCTAssertEqual(arr.count, 1)
+    }
 }
 
 extension SwiftToolboxTests {

@@ -7,8 +7,16 @@
 
 import Foundation
 
-extension Array where Element == UInt8 {
+public extension Array where Element == UInt8 {
     var hexString: String {
         return map { String(format: "%02hhx", $0) }.joined()
+    }
+}
+public extension Array where Element: Equatable {
+    // Remove first collection element that is equal to the given `object`:
+    mutating func remove(object: Element) {
+        while let index = firstIndex(of: object) {
+            remove(at: index)
+        }
     }
 }
