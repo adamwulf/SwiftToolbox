@@ -12,10 +12,14 @@ public struct Clamped<Value: Comparable> {
     var value: Value
     let range: ClosedRange<Value>
 
-    init(wrappedValue: Value, _ range: ClosedRange<Value>) {
+    public init(wrappedValue: Value, _ range: ClosedRange<Value>) {
         precondition(range.contains(wrappedValue))
         self.value = wrappedValue
         self.range = range
+    }
+
+    public var projectedValue: ClosedRange<Value> {
+        return range
     }
 
     public var wrappedValue: Value {
