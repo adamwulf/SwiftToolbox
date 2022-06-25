@@ -42,14 +42,16 @@ extension CGPoint {
         return Swift.max(x, y)
     }
 
-    // MARK: - Translate
+    // MARK: - Compute Vector
 
     static public func - (lhs: CGPoint, rhs: CGPoint) -> CGVector {
         return CGVector(dx: lhs.x - rhs.x, dy: lhs.y - rhs.y)
     }
 
-    static public func + (lhs: CGPoint, rhs: CGPoint) -> CGVector {
-        return CGVector(dx: lhs.x + rhs.x, dy: lhs.y + rhs.y)
+    // MARK: - Translate
+
+    static public func + (lhs: CGPoint, rhs: CGPoint) -> CGPoint {
+        return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
     }
 
     static public func + (lhs: CGPoint, rhs: CGVector) -> CGPoint {
@@ -66,6 +68,12 @@ extension CGPoint {
 
     static public func - (lhs: CGPoint, rhs: CGSize) -> CGPoint {
         return CGPoint(x: lhs.x - rhs.width, y: lhs.y - rhs.height)
+    }
+
+    // Reversed lhs/rhs
+
+    static public func + (lhs: CGVector, rhs: CGPoint) -> CGPoint {
+        return CGPoint(x: lhs.dx + rhs.x, y: lhs.dy + rhs.y)
     }
 
     // MARK: - Scale
