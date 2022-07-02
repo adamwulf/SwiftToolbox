@@ -23,12 +23,14 @@ public extension Array where Element: Equatable {
 
 public extension Array {
     /// Remove element from end of array, if exists
+    @inline(__always) @inlinable
     mutating func pop() -> Element? {
         guard !isEmpty else { return nil }
         return removeLast()
     }
 
     /// Remove element from start of array, if exists
+    @inline(__always) @inlinable
     mutating func dequeue() -> Element? {
         guard !isEmpty else { return nil }
         return removeFirst()
