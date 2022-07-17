@@ -89,6 +89,13 @@ final class SwiftToolboxTests: XCTestCase {
         arr.remove(object: Fumble(bump: 1, jump: 20))
         XCTAssertEqual(arr.count, 1)
     }
+
+    func testUniqueArray() {
+        let arr = [1, 2, 3, 1, 1, 2, 5, 6, 7]
+        let unique = arr.unique()
+
+        XCTAssertEqual([1, 2, 3, 5, 6, 7], unique)
+    }
 }
 
 extension SwiftToolboxTests {

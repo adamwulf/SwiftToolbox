@@ -22,6 +22,14 @@ public extension Array where Element: Equatable {
             remove(at: index)
         }
     }
+
+    func unique() -> [Element] {
+        var ret: [Element] = []
+        for item in self where !ret.contains(item) {
+            ret.append(item)
+        }
+        return ret
+    }
 }
 
 public extension Array {
