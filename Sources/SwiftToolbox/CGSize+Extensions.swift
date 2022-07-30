@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  CGSize+Extensions.swift
 //  
 //
 //  Created by Adam Wulf on 5/8/22.
