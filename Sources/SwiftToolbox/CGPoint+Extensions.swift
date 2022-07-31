@@ -42,6 +42,12 @@ extension CGPoint {
         return Swift.max(x, y)
     }
 
+    // MARK: - Prefix
+
+    static public prefix func - (rhs: CGPoint) -> CGPoint {
+        return CGPoint(x: -rhs.x, y: -rhs.y)
+    }
+
     // MARK: - Compute Vector
 
     static public func - (lhs: CGPoint, rhs: CGPoint) -> CGVector {
