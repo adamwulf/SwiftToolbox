@@ -55,4 +55,22 @@ extension CGVector {
         let len = magnitude
         return CGVector(dx: dx / len * target, dy: dy / len * target)
     }
+
+    // MARK: - Scale
+
+    static public func * (lhs: CGVector, rhs: Int) -> CGVector {
+        return CGVector(dx: lhs.dx * CGFloat(rhs), dy: lhs.dy * CGFloat(rhs))
+    }
+
+    static public func / (lhs: CGVector, rhs: Int) -> CGVector {
+        return CGVector(dx: lhs.dx / CGFloat(rhs), dy: lhs.dy / CGFloat(rhs))
+    }
+
+    static public func * (lhs: CGVector, rhs: CGFloat) -> CGVector {
+        return CGVector(dx: lhs.dx * rhs, dy: lhs.dy * rhs)
+    }
+
+    static public func / (lhs: CGVector, rhs: CGFloat) -> CGVector {
+        return CGVector(dx: lhs.dx / rhs, dy: lhs.dy / rhs)
+    }
 }
