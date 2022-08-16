@@ -56,6 +56,26 @@ extension CGVector {
         return CGVector(dx: dx / len * target, dy: dy / len * target)
     }
 
+    // MARK: - Assignment Operators
+
+    static public func += (lhs: inout CGVector, rhs: CGVector) {
+        lhs = lhs + rhs
+    }
+
+    static public func -= (lhs: inout CGVector, rhs: CGVector) {
+        lhs = lhs - rhs
+    }
+
+    // MARK: - Translate
+
+    static public func + (lhs: CGVector, rhs: CGVector) -> CGVector {
+        return CGVector(dx: lhs.dx + rhs.dx, dy: lhs.dy + rhs.dy)
+    }
+
+    static public func - (lhs: CGVector, rhs: CGVector) -> CGVector {
+        return CGVector(dx: lhs.dx - rhs.dx, dy: lhs.dy - rhs.dy)
+    }
+
     // MARK: - Scale
 
     static public func * (lhs: CGVector, rhs: Int) -> CGVector {

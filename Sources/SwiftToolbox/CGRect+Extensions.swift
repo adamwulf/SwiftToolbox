@@ -24,6 +24,16 @@ extension CGRect {
         return inset(by: -delta)
     }
 
+    // MARK: - Assignment Operators
+
+    static public func += (lhs: inout CGRect, rhs: CGVector) {
+        lhs = lhs + rhs
+    }
+
+    static public func -= (lhs: inout CGRect, rhs: CGVector) {
+        lhs = lhs - rhs
+    }
+
     // MARK: - Translate
 
     static public func - (lhs: CGRect, rhs: CGPoint) -> CGRect {

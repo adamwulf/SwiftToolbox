@@ -96,6 +96,19 @@ final class SwiftToolboxTests: XCTestCase {
 
         XCTAssertEqual([1, 2, 3, 5, 6, 7], unique)
     }
+
+    func testAddVectorToPoint() {
+        var p = CGPoint(2, 3)
+        var v = CGVector(1, 1)
+        p += v
+        XCTAssertEqual(p, CGPoint(3, 4))
+        p -= v
+        XCTAssertEqual(p, CGPoint(2, 3))
+        v += v
+        XCTAssertEqual(v, CGVector(2, 2))
+        v -= v
+        XCTAssertEqual(v, CGVector(0, 0))
+    }
 }
 
 extension SwiftToolboxTests {

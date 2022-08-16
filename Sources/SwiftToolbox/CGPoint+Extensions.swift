@@ -54,6 +54,16 @@ extension CGPoint {
         return CGVector(dx: lhs.x - rhs.x, dy: lhs.y - rhs.y)
     }
 
+    // MARK: - Assignment Operators
+
+    static public func += (lhs: inout CGPoint, rhs: CGVector) {
+        lhs = lhs + rhs
+    }
+
+    static public func -= (lhs: inout CGPoint, rhs: CGVector) {
+        lhs = lhs - rhs
+    }
+
     // MARK: - Translate
 
     static public func + (lhs: CGPoint, rhs: CGPoint) -> CGPoint {
