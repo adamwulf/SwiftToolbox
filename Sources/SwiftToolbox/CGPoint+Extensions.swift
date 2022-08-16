@@ -4,6 +4,7 @@
 //
 //  Created by Adam Wulf on 4/11/21.
 //
+// swiftlint:disable shorthand_operator
 
 import CoreGraphics
 
