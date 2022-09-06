@@ -125,6 +125,33 @@ final class SwiftToolboxTests: XCTestCase {
 
         XCTAssertEqual(sqrt(2), p.distanceToLine(through: l1, and: l2), accuracy: 0.0000001)
     }
+
+    func testClosestOnLine() {
+        let p = CGPoint(50, 50)
+        let l1 = CGPoint(0, 0)
+        let l2 = CGPoint(0, 100)
+
+        let res = p.closestPointToLine(through: l1, and: l2)
+        XCTAssertEqual(res, CGPoint(0, 50))
+    }
+
+    func testClosestOnLine2() {
+        let p = CGPoint(1, 1)
+        let l1 = CGPoint(-1, 1)
+        let l2 = CGPoint(1, -1)
+
+        let res = p.closestPointToLine(through: l1, and: l2)
+        XCTAssertEqual(res.x, 0, accuracy: 0.0000001)
+        XCTAssertEqual(res.y, 0, accuracy: 0.0000001)
+    }
+
+    func testDotProduct() {
+        let v1 = CGVector(-6, 8)
+        let v2 = CGVector(5, 12)
+
+        XCTAssertEqual(v1 • v2, 66)
+        XCTAssertEqual(v1.dot(v2), 66)
+    }
 }
 
 extension SwiftToolboxTests {

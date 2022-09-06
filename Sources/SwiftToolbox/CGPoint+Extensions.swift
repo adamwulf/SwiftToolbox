@@ -35,6 +35,13 @@ extension CGPoint {
         return num / den
     }
 
+    public func closestPointToLine(through p1: CGPoint, and p2: CGPoint) -> CGPoint {
+        let direction = (p2 - p1).normalized
+        let lhs = self - p1
+        let dot = lhs.dot(direction)
+        return p1 + direction * dot
+    }
+
     // MARK: - Convert
 
     public var asVector: CGVector {

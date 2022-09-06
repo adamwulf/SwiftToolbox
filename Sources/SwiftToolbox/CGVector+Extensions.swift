@@ -8,6 +8,7 @@
 
 import CoreGraphics
 
+infix operator • : MultiplicationPrecedence
 extension CGVector {
     public init(_ dx: CGFloat, _ dy: CGFloat) {
         self.init(dx: dx, dy: dy)
@@ -55,6 +56,16 @@ extension CGVector {
     public func normalize(to target: CGFloat = 1) -> CGVector {
         let len = magnitude
         return CGVector(dx: dx / len * target, dy: dy / len * target)
+    }
+
+    // MARK: - Dot Product
+
+    public func dot(_ other: CGVector) -> CGFloat {
+        return dx * other.dx + dy * other.dy
+    }
+
+    static public func • (lhs: CGVector, rhs: CGVector) -> CGFloat {
+        return lhs.dot(rhs)
     }
 
     // MARK: - Assignment Operators
