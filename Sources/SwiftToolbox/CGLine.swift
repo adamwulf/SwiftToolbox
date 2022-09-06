@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 /// Represents an infinite line through `p0` and `p1`
 public struct CGLine {
