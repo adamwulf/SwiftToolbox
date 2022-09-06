@@ -27,32 +27,38 @@ extension CGPoint {
         return sqrt(x2 + y2)
     }
 
-    public func distanceToLine(through p1: CGPoint, and p2: CGPoint) -> CGFloat {
-        let lineDiff = p2 - p1
-        let pointDiff = p1 - self
+    public func distance(to line: CGLine) -> CGFloat {
+        let p0 = line.p0
+        let p1 = line.p1
+        let lineDiff = p1 - p0
+        let pointDiff = p0 - self
         let num = abs(lineDiff.dx * pointDiff.dy - pointDiff.dx * lineDiff.dy)
         let den = sqrt(lineDiff.dx * lineDiff.dx + lineDiff.dy * lineDiff.dy)
         return num / den
     }
 
-    public func distanceToSegment(through p1: CGPoint, and p2: CGPoint) -> CGFloat {
-        let close = closestPointToSegment(through: p1, and: p2)
+    public func distance(to segment: CGSegment) -> CGFloat {
+        let close = closestPoint(to: segment)
         return distance(to: close)
     }
 
-    public func closestPointToLine(through p1: CGPoint, and p2: CGPoint) -> CGPoint {
-        let direction = (p2 - p1).normalized
-        let lhs = self - p1
+    public func closestPoint(to line: CGLine) -> CGPoint {
+        let p0 = line.p0
+        let p1 = line.p1
+        let direction = (p1 - p0).normalized
+        let lhs = self - p0
         let dot = lhs.dot(direction)
-        return p1 + direction * dot
+        return p0 + direction * dot
     }
 
-    public func closestPointToSegment(through p1: CGPoint, and p2: CGPoint) -> CGPoint {
-        let direction = (p2 - p1).normalized
-        let lhs = self - p1
-        let length = p1.distance(to: p2)
+    public func closestPoint(to segment: CGSegment) -> CGPoint {
+        let p0 = segment.start
+        let p1 = segment.end
+        let direction = (p1 - p0).normalized
+        let lhs = self - p0
+        let length = p0.distance(to: p1)
         let dot = Swift.min(length, Swift.max(0, lhs.dot(direction)))
-        return p1 + direction * dot
+        return p0 + direction * dot
     }
 
     // MARK: - Convert

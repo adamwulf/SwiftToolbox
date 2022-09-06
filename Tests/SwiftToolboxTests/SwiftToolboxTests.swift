@@ -115,7 +115,7 @@ final class SwiftToolboxTests: XCTestCase {
         let l1 = CGPoint(0, 0)
         let l2 = CGPoint(0, 100)
 
-        XCTAssertEqual(50, p.distanceToLine(through: l1, and: l2))
+        XCTAssertEqual(50, p.distance(to: CGLine(l1, l2)))
     }
 
     func testDistanceToLine2() {
@@ -123,7 +123,7 @@ final class SwiftToolboxTests: XCTestCase {
         let l1 = CGPoint(-1, 1)
         let l2 = CGPoint(1, -1)
 
-        XCTAssertEqual(sqrt(2), p.distanceToLine(through: l1, and: l2), accuracy: 0.0000001)
+        XCTAssertEqual(sqrt(2), p.distance(to: CGLine(l1, l2)), accuracy: 0.0000001)
     }
 
     func testClosestOnLine() {
@@ -131,7 +131,7 @@ final class SwiftToolboxTests: XCTestCase {
         let l1 = CGPoint(0, 0)
         let l2 = CGPoint(0, 100)
 
-        let res = p.closestPointToLine(through: l1, and: l2)
+        let res = p.closestPoint(to: CGLine(l1, l2))
         XCTAssertEqual(res, CGPoint(0, 50))
     }
 
@@ -140,7 +140,7 @@ final class SwiftToolboxTests: XCTestCase {
         let l1 = CGPoint(-1, 1)
         let l2 = CGPoint(1, -1)
 
-        let res = p.closestPointToLine(through: l1, and: l2)
+        let res = p.closestPoint(to: CGLine(l1, l2))
         XCTAssertEqual(res.x, 0, accuracy: 0.0000001)
         XCTAssertEqual(res.y, 0, accuracy: 0.0000001)
     }
