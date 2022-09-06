@@ -109,6 +109,22 @@ final class SwiftToolboxTests: XCTestCase {
         v -= v
         XCTAssertEqual(v, CGVector(0, 0))
     }
+
+    func testDistanceToLine() {
+        let p = CGPoint(50, 50)
+        let l1 = CGPoint(0, 0)
+        let l2 = CGPoint(0, 100)
+
+        XCTAssertEqual(50, p.distanceToLine(through: l1, and: l2))
+    }
+
+    func testDistanceToLine2() {
+        let p = CGPoint(1, 1)
+        let l1 = CGPoint(-1, 1)
+        let l2 = CGPoint(1, -1)
+
+        XCTAssertEqual(sqrt(2), p.distanceToLine(through: l1, and: l2), accuracy: 0.0000001)
+    }
 }
 
 extension SwiftToolboxTests {

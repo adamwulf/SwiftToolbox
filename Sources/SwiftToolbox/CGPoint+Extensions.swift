@@ -27,6 +27,14 @@ extension CGPoint {
         return sqrt(x2 + y2)
     }
 
+    public func distanceToLine(through p1: CGPoint, and p2: CGPoint) -> CGFloat {
+        let lineDiff = p2 - p1
+        let pointDiff = p1 - self
+        let num = abs(lineDiff.dx * pointDiff.dy - pointDiff.dx * lineDiff.dy)
+        let den = sqrt(lineDiff.dx * lineDiff.dx + lineDiff.dy * lineDiff.dy)
+        return num / den
+    }
+
     // MARK: - Convert
 
     public var asVector: CGVector {
