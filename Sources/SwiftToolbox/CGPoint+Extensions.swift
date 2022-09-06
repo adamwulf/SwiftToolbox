@@ -35,10 +35,23 @@ extension CGPoint {
         return num / den
     }
 
+    public func distanceToSegment(through p1: CGPoint, and p2: CGPoint) -> CGFloat {
+        let close = closestPointToSegment(through: p1, and: p2)
+        return distance(to: close)
+    }
+
     public func closestPointToLine(through p1: CGPoint, and p2: CGPoint) -> CGPoint {
         let direction = (p2 - p1).normalized
         let lhs = self - p1
         let dot = lhs.dot(direction)
+        return p1 + direction * dot
+    }
+
+    public func closestPointToSegment(through p1: CGPoint, and p2: CGPoint) -> CGPoint {
+        let direction = (p2 - p1).normalized
+        let lhs = self - p1
+        let length = p1.distance(to: p2)
+        let dot = Swift.min(length, Swift.max(0, lhs.dot(direction)))
         return p1 + direction * dot
     }
 
