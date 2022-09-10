@@ -149,7 +149,7 @@ final class SwiftToolboxTests: XCTestCase {
         let v1 = CGVector(-6, 8)
         let v2 = CGVector(5, 12)
 
-        XCTAssertEqual(v1 • v2, 66)
+        XCTAssertEqual(v1 ⋅ v2, 66)
         XCTAssertEqual(v1.dot(v2), 66)
     }
 }

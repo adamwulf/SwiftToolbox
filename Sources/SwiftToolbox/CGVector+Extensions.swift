@@ -8,7 +8,7 @@
 
 import CoreGraphics
 
-infix operator • : MultiplicationPrecedence
+infix operator ⋅ : MultiplicationPrecedence
 extension CGVector {
     public init(_ dx: CGFloat, _ dy: CGFloat) {
         self.init(dx: dx, dy: dy)
@@ -64,7 +64,7 @@ extension CGVector {
         return dx * other.dx + dy * other.dy
     }
 
-    static public func • (lhs: CGVector, rhs: CGVector) -> CGFloat {
+    static public func ⋅ (lhs: CGVector, rhs: CGVector) -> CGFloat {
         return lhs.dot(rhs)
     }
 
