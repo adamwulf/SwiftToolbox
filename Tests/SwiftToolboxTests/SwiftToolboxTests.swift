@@ -152,6 +152,14 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(v1 ⋅ v2, 66)
         XCTAssertEqual(v1.dot(v2), 66)
     }
+
+    func testPower() {
+        let num: CGFloat = 1.5
+
+        XCTAssertEqual(num.squared(), 2.25)
+        XCTAssertEqual(num.cubed(), 3.375)
+        XCTAssertEqual(num.pow(4), 5.0625)
+    }
 }
 
 extension SwiftToolboxTests {
