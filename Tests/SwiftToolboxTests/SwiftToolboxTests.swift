@@ -45,6 +45,23 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(CGVector(dx: 10, dy: 4).normalize(to: 3).magnitude, 3, accuracy: Self.epsilon)
     }
 
+    func testSumDiffVectors() {
+        let vec1 = CGVector(10, 20)
+        let vec2 = CGVector(20, 10)
+
+        XCTAssertEqual(vec1 - vec2, CGVector(-10, 10))
+        XCTAssertEqual(vec2 - vec1, CGVector(10, -10))
+        XCTAssertEqual(vec1 + vec2, CGVector(30, 30))
+        XCTAssertEqual(vec2 + vec1, CGVector(30, 30))
+    }
+
+    func testMultVectorOrder() {
+        let vec = CGVector(10, 20)
+
+        XCTAssertEqual(vec * 4, CGVector(40, 80))
+        XCTAssertEqual(4 * vec, CGVector(40, 80))
+    }
+
     func testStringTrim() {
         let str = "{ asdf }"
         let trimmed = "asdf"

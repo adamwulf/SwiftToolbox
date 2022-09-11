@@ -111,4 +111,12 @@ extension CGVector {
     static public func / (lhs: CGVector, rhs: CGFloat) -> CGVector {
         return CGVector(dx: lhs.dx / rhs, dy: lhs.dy / rhs)
     }
+
+    static public func * (lhs: Int, rhs: CGVector) -> CGVector {
+        return CGVector(dx: rhs.dx * CGFloat(lhs), dy: rhs.dy * CGFloat(lhs))
+    }
+
+    static public func * (lhs: CGFloat, rhs: CGVector) -> CGVector {
+        return CGVector(dx: rhs.dx * lhs, dy: rhs.dy * lhs)
+    }
 }
