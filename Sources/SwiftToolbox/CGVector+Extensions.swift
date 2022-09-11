@@ -58,6 +58,12 @@ extension CGVector {
         return CGVector(dx: dx / len * target, dy: dy / len * target)
     }
 
+    // MARK: - Prefixes
+
+    static prefix public func - (vec: CGVector) -> CGVector {
+        return CGVector(-vec.dx, -vec.dy)
+    }
+
     // MARK: - Dot Product
 
     public func dot(_ other: CGVector) -> CGFloat {
