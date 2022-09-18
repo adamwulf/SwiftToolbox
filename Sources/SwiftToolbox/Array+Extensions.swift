@@ -48,4 +48,10 @@ public extension Array {
         guard !isEmpty else { return nil }
         return removeFirst()
     }
+
+    func count(where condition: (Element) throws -> Bool) rethrows -> Int {
+        return try reduce(0, { result, ele in
+            return result + (try condition(ele) ? 1 : 0)
+        })
+    }
 }

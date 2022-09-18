@@ -177,6 +177,11 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(num.cubed(), 3.375)
         XCTAssertEqual(num.pow(4), 5.0625)
     }
+
+    func testCountWhere() {
+        let nums = [1, 5, 7, 4, 6, 32, 8, 0]
+        XCTAssertEqual(nums.count(where: { $0 > 7 }), 2)
+    }
 }
 
 extension SwiftToolboxTests {
