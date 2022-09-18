@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension FileManager {
+public extension FileManager {
     func isDirectory(_ url: URL) -> Bool {
         guard url.isFileURL else { return false }
         var isDirectory: ObjCBool = false
