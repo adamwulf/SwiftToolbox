@@ -182,6 +182,19 @@ final class SwiftToolboxTests: XCTestCase {
         let nums = [1, 5, 7, 4, 6, 32, 8, 0]
         XCTAssertEqual(nums.count(where: { $0 > 7 }), 2)
     }
+
+    func testDynamicProperties() {
+        let (a, b) = (Object(), Object())
+
+        XCTAssertNil(a.value)
+        XCTAssertNil(b.value)
+
+        a.value = 1
+        b.value = 2
+
+        XCTAssertEqual(a.value, 1)
+        XCTAssertEqual(b.value, 2)
+    }
 }
 
 extension SwiftToolboxTests {
@@ -193,4 +206,12 @@ extension SwiftToolboxTests {
         ("testCGVectorMag", testCGVectorMag),
         ("testCGVectorNormalized", testCGVectorNormalized)
     ]
+}
+
+private class Object: DynamicProperties { }
+extension Object {
+    var value: Int? {
+        get { return self[dynamic: #function] }
+        set { self[dynamic: #function] = newValue }
+    }
 }
