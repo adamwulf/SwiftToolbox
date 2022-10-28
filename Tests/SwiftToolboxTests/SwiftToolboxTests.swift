@@ -195,6 +195,11 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(a.value, 1)
         XCTAssertEqual(b.value, 2)
     }
+
+    func testClamp() {
+        XCTAssertEqual(30.clamped(to: 1...10), 10)
+        XCTAssertEqual(30.clamped(to: 100...200), 100)
+    }
 }
 
 extension SwiftToolboxTests {

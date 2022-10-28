@@ -27,3 +27,13 @@ public struct Clamped<Value: Comparable> {
         set { value = min(max(range.lowerBound, newValue), range.upperBound) }
     }
 }
+
+extension Comparable {
+    func clamped(to limits: ClosedRange<Self>) -> Self {
+        return min(max(self, limits.lowerBound), limits.upperBound)
+    }
+}
+
+func clamped<T>(_ val: T, to limits: ClosedRange<T>) -> T {
+    return min(max(val, limits.lowerBound), limits.upperBound)
+}
