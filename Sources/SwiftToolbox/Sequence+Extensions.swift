@@ -19,4 +19,13 @@ extension Sequence {
         }
         return ret
     }
+    public func map<ElementOfResult>(_ transform: (Self.Element, Int) throws -> ElementOfResult) rethrows -> [ElementOfResult] {
+        var ret: [ElementOfResult] = []
+        var index = 0
+        for item in self {
+            ret.append(try transform(item, index))
+            index += 1
+        }
+        return ret
+    }
 }

@@ -19,6 +19,31 @@ extension String {
     public func countOccurrences(of chars: CharacterSet) -> Int {
         return components(separatedBy: chars).count - 1
     }
+
+    @_disfavoredOverload
+    public func contains(_ any: Character...) -> Bool {
+        return any.contains(where: { self.contains($0) })
+    }
+}
+
+extension String {
+    @available(iOS 13.0, macOS 10.15, *)
+    public func slashEscaping(_ characters: String) -> String {
+        var ret = ""
+        let scanner = Scanner(string: self)
+        scanner.charactersToBeSkipped = nil
+        while let char = scanner.scanCharacter() {
+            if char == "\\" {
+                ret.append("\\\(char)")
+            } else if characters.contains(char) {
+                ret.append("\\\(char)")
+            } else {
+                ret.append(char)
+            }
+        }
+        return ret
+    }
+
 }
 
 // https://gist.github.com/BetterProgramming/ac4f639c915ef0560fcca5208d9456f9#file-firstoccur-swift

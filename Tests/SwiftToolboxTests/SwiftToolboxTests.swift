@@ -200,6 +200,64 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(30.clamped(to: 1...10), 10)
         XCTAssertEqual(30.clamped(to: 100...200), 100)
     }
+
+    @available(iOS 13.0, macOS 10.15, *)
+    func testStringEscaping() {
+        let str1 = "asdf1234"
+        XCTAssertEqual(str1.slashEscaping("s4"), "a\\sdf123\\4")
+        let str2 = "asdf\n\"asdf"
+        XCTAssertEqual(str2.slashEscaping("\n\""), "asdf\\\n\\\"asdf")
+        let str3 = "asdf\\as df"
+        XCTAssertEqual(str3.slashEscaping(" "), "asdf\\\\as\\ df")
+    }
+
+    @available(iOS 13.0, macOS 10.15, *)
+    func testLogfmt() {
+        class Fumble: CustomDebugStringConvertible {
+            var debugDescription: String {
+                return "debugStr"
+            }
+        }
+        class Mumble: CustomStringConvertible {
+            var description: String {
+                return "customString"
+            }
+        }
+        let str1 = "asdf"
+        XCTAssertEqual(String.logfmt(str1), "asdf")
+        let str2 = "asdf\"asdf\""
+        XCTAssertEqual(String.logfmt(str2), "\"asdf\\\"asdf\\\"\"")
+        let num = 12
+        XCTAssertEqual(String.logfmt(num), "12")
+        let debugObj = Fumble()
+        XCTAssertEqual(String.logfmt(debugObj), "debugStr")
+        let descObj = Mumble()
+        XCTAssertEqual(String.logfmt(descObj), "customString")
+        let arr1 = ["asdf", "qwer"]
+        XCTAssertEqual(String.logfmt(arr1), "0=asdf 1=qwer")
+        let arr2 = ["asdf", "qwer thjfdg"]
+        XCTAssertEqual(String.logfmt(arr2), "0=asdf 1=\"qwer thjfdg\"")
+        let dict1 = ["asdf": "qwer thjfdg"]
+        XCTAssertEqual(String.logfmt(dict1), "asdf=\"qwer thjfdg\"")
+        let dict2 = ["asdf": ["qwer thjfdg"]]
+        XCTAssertEqual(String.logfmt(dict2), "asdf.0=\"qwer thjfdg\"")
+        let dict3 = ["asdf": ["fumble": "qwer thjfdg"]]
+        XCTAssertEqual(String.logfmt(dict3), "asdf.fumble=\"qwer thjfdg\"")
+
+        let memoryContext = ["memory":
+                                ["current": ["footprint": 128,
+                                             "available": 2000 - 128,
+                                             "limit": 2000],
+                                 "peak": ["footprint": 348,
+                                          "available": 2000 - 348,
+                                          "limit": 2000]]]
+        XCTAssertEqual(String.logfmt(memoryContext), ["memory.current.available=1872",
+                                                         "memory.current.footprint=128",
+                                                         "memory.current.limit=2000",
+                                                         "memory.peak.available=1652",
+                                                         "memory.peak.footprint=348",
+                                                         "memory.peak.limit=2000"].joined(separator: " "))
+    }
 }
 
 extension SwiftToolboxTests {
