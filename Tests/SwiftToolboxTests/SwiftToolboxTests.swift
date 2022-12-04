@@ -223,6 +223,11 @@ final class SwiftToolboxTests: XCTestCase {
                 return "customString"
             }
         }
+        class Bumble: CustomLogfmtStringConvertible {
+            var logfmtDescription: String {
+                return "grumblebumble"
+            }
+        }
         let str1 = "asdf"
         XCTAssertEqual(String.logfmt(str1), "asdf")
         let str2 = "asdf\"asdf\""
@@ -233,6 +238,8 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(String.logfmt(debugObj), "debugStr")
         let descObj = Mumble()
         XCTAssertEqual(String.logfmt(descObj), "customString")
+        let logfmtObj = Bumble()
+        XCTAssertEqual(String.logfmt(logfmtObj), "grumblebumble")
         let arr1 = ["asdf", "qwer"]
         XCTAssertEqual(String.logfmt(arr1), "0=asdf 1=qwer")
         let arr2 = ["asdf", "qwer thjfdg"]

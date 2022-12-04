@@ -7,6 +7,10 @@
 
 import Foundation
 
+public protocol CustomLogfmtStringConvertible {
+    var logfmtDescription: String { get }
+}
+
 public extension String {
     /// Format the input object as lotfmt as best as possible. Supports dictionaries, arrays, strings, numbers, CustomStringConvertables
     /// - seealso: https://www.brandur.org/logfmt
@@ -49,6 +53,8 @@ private extension String {
             return attribute.eqValue(object.contains("\"", " ") ? "\"\(object.slashEscaping("\""))\"" : object)
         case let object as any Numeric:
             return attribute.eqValue("\(object)")
+        case let object as CustomLogfmtStringConvertible:
+            return logfmt(object.logfmtDescription, attribute: attribute)
         case let object as CustomStringConvertible:
             return logfmt(object.description, attribute: attribute)
         case let object as CustomDebugStringConvertible:
