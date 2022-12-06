@@ -31,7 +31,7 @@ extension String {
 }
 
 extension String {
-    public func slashEscaping(_ characters: String) -> String {
+    public func slashEscape(_ characters: String) -> String {
         var result = ""
         for char in self {
             if char == "\\" {

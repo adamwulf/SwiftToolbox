@@ -47,7 +47,7 @@ private extension String {
 
     static func format(attribute: String, value: String) -> String {
         let attribute = attribute.replacingOccurrences(of: " ", with: "_")
-        let value = value.contains(charactersIn: "\" ") ? value.slashEscaping("\"").wrapInQuotes() : value
+        let value = value.contains(charactersIn: "\" ") ? value.slashEscape("\"").wrapInQuotes() : value
         if attribute.isEmpty {
             return value
         } else if value.isEmpty {

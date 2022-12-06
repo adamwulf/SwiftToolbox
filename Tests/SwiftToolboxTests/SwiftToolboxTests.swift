@@ -204,11 +204,11 @@ final class SwiftToolboxTests: XCTestCase {
     @available(iOS 13.0, macOS 10.15, *)
     func testStringEscaping() {
         let str1 = "asdf1234"
-        XCTAssertEqual(str1.slashEscaping("s4"), "a\\sdf123\\4")
+        XCTAssertEqual(str1.slashEscape("s4"), "a\\sdf123\\4")
         let str2 = "asdf\n\"asdf"
-        XCTAssertEqual(str2.slashEscaping("\n\""), "asdf\\\n\\\"asdf")
+        XCTAssertEqual(str2.slashEscape("\n\""), "asdf\\\n\\\"asdf")
         let str3 = "asdf\\as df"
-        XCTAssertEqual(str3.slashEscaping(" "), "asdf\\\\as\\ df")
+        XCTAssertEqual(str3.slashEscape(" "), "asdf\\\\as\\ df")
     }
 
     @available(iOS 13.0, macOS 10.15, *)
