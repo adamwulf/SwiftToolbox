@@ -265,6 +265,20 @@ final class SwiftToolboxTests: XCTestCase {
                                                          "memory.peak.footprint=348",
                                                          "memory.peak.limit=2000"].joined(separator: " "))
     }
+
+    func testContainsCharacters() {
+        let str = "hello world"
+
+        XCTAssertTrue(str.contains(charactersIn: "h"))
+        XCTAssertTrue(str.contains(charactersIn: "he"))
+        XCTAssertTrue(str.contains(charactersIn: "hel"))
+        XCTAssertTrue(str.contains(charactersIn: "dlrow olleh"))
+
+        XCTAssertFalse(str.contains(charactersIn: ""))
+        XCTAssertFalse(str.contains(charactersIn: "z"))
+        XCTAssertFalse(str.contains(charactersIn: "zxc"))
+        XCTAssertFalse(str.contains(charactersIn: "zxvbnm"))
+    }
 }
 
 extension SwiftToolboxTests {

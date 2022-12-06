@@ -21,29 +21,10 @@ public extension String {
 }
 
 private extension String {
-    func dot(_ str: String) -> String {
-        if self.isEmpty {
-            return str
-        } else {
-            return "\(self).\(str)"
-        }
-    }
-
-    func eqValue(_ str: String) -> String {
-        if self.isEmpty {
-            return str
-        } else {
-            return "\(self)=\(str)"
-        }
-    }
-
-    @available(iOS 13.0, macOS 10.15, *)
-    static private func logfmt(_ object: Any, attribute: String) -> String {
+    static func logfmt(_ object: Any, attribute: String) -> String {
         switch object {
         case let object as String:
-            return attribute.eqValue(object.contains("\"", " ") ? "\"\(object.slashEscaping("\""))\"" : object)
-        case let object as any Numeric:
-            return attribute.eqValue("\(object)")
+            return format(attribute: attribute, value: object)
         case let object as [String: Any]:
             return object.sorted(by: { $0.key < $1.key }).map({ keyVal in
                 return logfmt(keyVal.value, attribute: attribute.dot(keyVal.key))
@@ -62,5 +43,31 @@ private extension String {
         default:
             return logfmt("\(object)", attribute: attribute)
         }
+    }
+
+    static func format(attribute: String, value: String) -> String {
+        let attribute = attribute.replacingOccurrences(of: " ", with: "_")
+        let value = value.contains(charactersIn: "\" ") ? value.slashEscaping("\"").wrapInQuotes() : value
+        if attribute.isEmpty {
+            return value
+        } else if value.isEmpty {
+            return attribute
+        } else {
+            return attribute + "=" + value
+        }
+    }
+}
+
+private extension String {
+    func dot(_ str: String) -> String {
+        if self.isEmpty {
+            return str
+        } else {
+            return "\(self).\(str)"
+        }
+    }
+
+    func wrapInQuotes() -> String {
+        return "\"\(self)\""
     }
 }
