@@ -197,8 +197,8 @@ final class SwiftToolboxTests: XCTestCase {
     }
 
     func testClamp() {
-        XCTAssertEqual(30.clamped(to: 1...10), 10)
-        XCTAssertEqual(30.clamped(to: 100...200), 100)
+        XCTAssertEqual(30.clamp(to: 1...10), 10)
+        XCTAssertEqual(30.clamp(to: 100...200), 100)
     }
 
     @available(iOS 13.0, macOS 10.15, *)
@@ -278,6 +278,28 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertFalse(str.contains(charactersIn: "z"))
         XCTAssertFalse(str.contains(charactersIn: "zxc"))
         XCTAssertFalse(str.contains(charactersIn: "zxvbnm"))
+    }
+
+    func testPlistEncoding() throws {
+        let now = Date()
+        let plist: [String: PropertyListCompatible] = ["data": Data([12, 13]),
+                                      "string": "bumble",
+                                      "int": 12,
+                                      "double": 12.2,
+                                      "date": now,
+                                      "array": [1, 2, 3]]
+        let plistData = try PropertyListSerialization.data(fromPropertyList: plist, format: .binary, options: 0)
+        guard let readPlist = try PropertyListSerialization.propertyList(from: plistData, format: nil) as? [String: Any] else {
+            XCTFail()
+            return
+        }
+
+        XCTAssertEqual(readPlist["data"] as? Data, Data([12, 13]))
+        XCTAssertEqual(readPlist["string"] as? String, "bumble")
+        XCTAssertEqual(readPlist["int"] as? Int64, 12)
+        XCTAssertEqual(readPlist["double"] as? Double, 12.2)
+        XCTAssertEqual(readPlist["date"] as? Date, now)
+        XCTAssertEqual(readPlist["array"] as? [Int], [1, 2, 3])
     }
 }
 
