@@ -26,8 +26,8 @@ extension CGVector {
 
     // MARK: - Vectors
 
-    public var normalized: CGVector {
-        return normalize()
+    public var unitVector: CGVector {
+        return scale(toLength: 1)
     }
 
     public var magnitude: CGFloat {
@@ -53,9 +53,13 @@ extension CGVector {
         self.init(dx: cos(theta), dy: sin(theta))
     }
 
-    public func normalize(to target: CGFloat = 1) -> CGVector {
+    public func scale(toLength target: CGFloat) -> CGVector {
         let len = magnitude
         return CGVector(dx: dx / len * target, dy: dy / len * target)
+    }
+
+    public var normal: CGVector {
+        return CGVector(dx: -self.dy, dy: self.dx)
     }
 
     // MARK: - Prefixes

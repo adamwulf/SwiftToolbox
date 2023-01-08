@@ -45,7 +45,7 @@ extension CGPoint {
     public func closestPoint(to line: CGLine) -> CGPoint {
         let p0 = line.p0
         let p1 = line.p1
-        let direction = (p1 - p0).normalized
+        let direction = (p1 - p0).unitVector
         let lhs = self - p0
         let dot = lhs.dot(direction)
         return p0 + direction * dot
@@ -54,7 +54,7 @@ extension CGPoint {
     public func closestPoint(to segment: CGSegment) -> CGPoint {
         let p0 = segment.start
         let p1 = segment.end
-        let direction = (p1 - p0).normalized
+        let direction = (p1 - p0).unitVector
         let lhs = self - p0
         let length = p0.distance(to: p1)
         let dot = Swift.min(length, Swift.max(0, lhs.dot(direction)))

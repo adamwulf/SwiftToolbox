@@ -24,6 +24,16 @@ public struct CGLine {
         self.p0 = p0
         self.p1 = p1
     }
+    // MARK: Length Property
+    public var length: CGFloat {
+        return (p1 - p0).magnitude
+    }
+
+    // MARK: Distance to Point
+    public func distanceToPoint(point: CGPoint) -> CGFloat {
+        let normal = (p1 - p0).normal
+        return (point - p0).dot(normal)
+    }
 }
 
 /// Represents an line segment from `start` to `end`

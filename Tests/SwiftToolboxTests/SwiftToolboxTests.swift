@@ -39,10 +39,10 @@ final class SwiftToolboxTests: XCTestCase {
     }
 
     func testCGVectorNormalized() {
-        XCTAssertEqual(CGVector(dx: 10, dy: 0).normalized.magnitude, 1)
-        XCTAssertEqual(CGVector(dx: 10, dy: 4).normalized.magnitude, 1)
-        XCTAssertEqual(CGVector(dx: 10, dy: 0).normalize(to: 3).magnitude, 3)
-        XCTAssertEqual(CGVector(dx: 10, dy: 4).normalize(to: 3).magnitude, 3, accuracy: Self.epsilon)
+        XCTAssertEqual(CGVector(dx: 10, dy: 0).unitVector.magnitude, 1)
+        XCTAssertEqual(CGVector(dx: 10, dy: 4).unitVector.magnitude, 1)
+        XCTAssertEqual(CGVector(dx: 10, dy: 0).scale(toLength: 3).magnitude, 3)
+        XCTAssertEqual(CGVector(dx: 10, dy: 4).scale(toLength: 3).magnitude, 3, accuracy: Self.epsilon)
     }
 
     func testSumDiffVectors() {
