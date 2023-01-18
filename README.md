@@ -2,4 +2,5 @@
 
 # SwiftToolbox
 
-A description of this package.
+SwiftToolbox adds a number of helpful methods to Swift types.
+Check out [https://adamwulf.github.io/SwiftToolbox/documentation/swifttoolbox/](the documentation).
