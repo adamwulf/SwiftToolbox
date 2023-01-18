@@ -7,10 +7,11 @@
 
 import Foundation
 
+/// Protocol for objects that can be converted to Logfmt strings
 public protocol CustomLogfmtStringConvertible {
+    /// The Logfmt description of the object
     var logfmtDescription: String { get }
 }
-
 public extension String {
     /// Format the input object as lotfmt as best as possible. Supports dictionaries, arrays, strings, numbers, CustomStringConvertables
     /// - seealso: https://www.brandur.org/logfmt
