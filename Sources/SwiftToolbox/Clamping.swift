@@ -29,7 +29,7 @@ public struct Clamped<Value: Comparable> {
     /// The clamped value of the wrapped property
     public var wrappedValue: Value {
         get { value }
-        set { value = clamp(value, to: range) }
+        set { value = clamp(newValue, to: range) }
     }
 }
 

@@ -5,6 +5,7 @@
 //  Created by Adam Wulf on 1/7/23.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 /// Extension to the NSLayoutConstraint class to provide additional methods
@@ -25,3 +26,4 @@ extension NSLayoutConstraint {
         return self
     }
 }
+#endif

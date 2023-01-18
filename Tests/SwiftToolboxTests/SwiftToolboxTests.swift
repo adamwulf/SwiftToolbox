@@ -201,6 +201,20 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(30.clamp(to: 100...200), 100)
     }
 
+    func testClampObj() {
+        struct Fumble {
+            @Clamped(1...10) var bumble: Int = 4
+        }
+        var something = Fumble()
+        XCTAssertEqual(something.bumble, 4)
+        something.bumble = 20
+        XCTAssertEqual(something.bumble, 10)
+        something.bumble = -20
+        XCTAssertEqual(something.bumble, 1)
+        something.bumble = 3
+        XCTAssertEqual(something.bumble, 3)
+    }
+
     @available(iOS 13.0, macOS 10.15, *)
     func testStringEscaping() {
         let str1 = "asdf1234"
