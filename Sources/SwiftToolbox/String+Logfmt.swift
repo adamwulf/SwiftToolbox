@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  String+Logfmt.swift
 //  
 //
 //  Created by Adam Wulf on 12/4/22.
@@ -21,6 +21,12 @@ public extension String {
 }
 
 private extension String {
+    /// Format the input object as lotfmt as best as possible. Supports dictionaries, arrays, strings, numbers, CustomStringConvertables
+    /// - Parameters:
+    ///   - object: The object to format
+    ///   - attribute: The attribute to use when formatting the object
+    /// - Returns: The formatted string
+    /// - seealso: https://www.brandur.org/logfmt
     static func logfmt(_ object: Any, attribute: String) -> String {
         switch object {
         case let object as String:
@@ -45,6 +51,11 @@ private extension String {
         }
     }
 
+    /// Format the attribute and value as a logfmt string
+    /// - Parameters:
+    ///   - attribute: The attribute to use when formatting the object
+    ///   - value: The value to use when formatting the object
+    /// - Returns: The formatted string
     static func format(attribute: String, value: String) -> String {
         let attribute = attribute.replacingOccurrences(of: " ", with: "_")
         let value = value.contains(charactersIn: "\" ") ? value.slashEscape("\"").wrapInQuotes() : value
@@ -59,6 +70,10 @@ private extension String {
 }
 
 private extension String {
+    /// Joins this `String` with the input `str` by joining them with a `.` separator
+    /// - Parameters:
+    ///   - str: The string to append after a `.`
+    /// - Returns: The string concatenated with a `.` and the input string
     func dot(_ str: String) -> String {
         if self.isEmpty {
             return str
@@ -67,6 +82,10 @@ private extension String {
         }
     }
 
+    /// Format the input string by wrapping it in quotes
+    /// - Parameters:
+    ///   - str: The string to wrap
+    /// - Returns: The wrapped string
     func wrapInQuotes() -> String {
         return "\"\(self)\""
     }

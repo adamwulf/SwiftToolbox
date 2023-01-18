@@ -7,30 +7,47 @@
 
 import Foundation
 
+/// An extension to the `String` class.
 extension String {
+    /// Trims the characters in the given string from the receiver.
+    /// - Parameter chars: The characters to trim.
+    /// - Returns: The trimmed string.
     public func trimmingCharacters(in chars: String) -> String {
         return self.trimmingCharacters(in: CharacterSet(charactersIn: chars))
     }
 
+    /// Counts the number of occurrences of the given string in the receiver.
+    /// - Parameter string: The string to count.
+    /// - Returns: The number of occurrences.
     public func countOccurrences<Target>(of string: Target) -> Int where Target: StringProtocol {
         return components(separatedBy: string).count - 1
     }
 
+    /// Counts the number of occurrences of the given character set in the receiver.
+    /// - Parameter chars: The character set to count.
+    /// - Returns: The number of occurrences.
     public func countOccurrences(of chars: CharacterSet) -> Int {
         return components(separatedBy: chars).count - 1
     }
 
+    /// Checks if the receiver contains any of the given characters.
+    /// - Parameter any: The characters to check for.
+    /// - Returns: `true` if the receiver contains any of the given characters, `false` otherwise.
     @_disfavoredOverload
     public func contains(_ any: Character...) -> Bool {
         return any.contains(where: { self.contains($0) })
     }
 
+    /// Checks if the receiver contains any of the characters in the given string.
+    /// - Parameter characters: The characters to check for.
+    /// - Returns: `true` if the receiver contains any of the given characters, `false` otherwise.
     func contains(charactersIn characters: String) -> Bool {
         return characters.contains(where: { self.contains($0) })
     }
-}
 
-extension String {
+    /// Escapes the given characters in the receiver with a backslash.
+    /// - Parameter characters: The characters to escape.
+    /// - Returns: The escaped string.
     public func slashEscape(_ characters: String) -> String {
         var result = ""
         for char in self {
@@ -44,11 +61,10 @@ extension String {
         }
         return result
     }
-}
 
-// https://gist.github.com/BetterProgramming/ac4f639c915ef0560fcca5208d9456f9#file-firstoccur-swift
-// https://gist.github.com/BetterProgramming/37e2019711c00ac678600a878e2d879f#file-transformhelper-swift
-extension String {
+    /// Finds the indices of the given string in the receiver.
+    /// - Parameter occurrence: The string to search for.
+    /// - Returns: An array of indices.
     public func indices(of occurrence: String) -> [Int] {
         var indices = [Int]()
         var position = startIndex
@@ -67,6 +83,9 @@ extension String {
         return indices
     }
 
+    /// Finds the ranges of the given string in the receiver.
+    /// - Parameter searchString: The string to search for.
+    /// - Returns: An array of ranges.
     public func ranges(of searchString: String) -> [Range<String.Index>] {
         let _indices = indices(of: searchString)
         return _indices.map({ index(startIndex, offsetBy: $0)..<index(startIndex, offsetBy: $0 + searchString.count) })

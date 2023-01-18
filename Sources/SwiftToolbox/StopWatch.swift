@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import CoreGraphics
 
 func synchronized<T>(_ lock: AnyObject, _ body: () throws -> T) rethrows -> T {
     objc_sync_enter(lock)
@@ -14,31 +13,34 @@ func synchronized<T>(_ lock: AnyObject, _ body: () throws -> T) rethrows -> T {
     return try body()
 }
 
+/// A class for measuring elapsed time.
 class StopWatch {
-    fileprivate let NSEC_PER_SEC = 1000000000
+    /// The number of nanoseconds in a second.
+    private let NSEC_PER_SEC = 1000000000
 
+    /// A flag to indicate if the stopwatch is running.
     private var running = false
+    /// The start time of the stopwatch.
     private var startTime: UInt64 = 0
-    private var duration: CGFloat = 0
+    /// The total duration of the stopwatch.
+    private var duration: TimeInterval = 0
+    /// The timebase info used to calculate elapsed time.
     private var info: mach_timebase_info_data_t
 
-    static func start() -> StopWatch {
-        let ret = StopWatch()
-        ret.start()
-        return ret
-    }
-
+    /// Creates a new `StopWatch` instance.
     init() {
         info = mach_timebase_info_data_t()
         mach_timebase_info(&info)
     }
 
+    /// A flag to indicate if the stopwatch is running.
     var isRunning: Bool {
         return synchronized(self) { () -> Bool in
             return running
         }
     }
 
+    /// Starts the stopwatch.
     func start() {
         synchronized(self) { () -> Void in
             if !isRunning {
@@ -48,6 +50,7 @@ class StopWatch {
         }
     }
 
+    /// Resets the stopwatch.
     func reset() {
         synchronized(self) { () -> Void in
             running = false
@@ -56,9 +59,11 @@ class StopWatch {
         }
     }
 
+    /// Stops the stopwatch and returns the total duration.
+    /// - Returns: The total duration of the stopwatch.
     @discardableResult
-    func stop() -> CGFloat {
-        synchronized(self) { () -> CGFloat in
+    func stop() -> TimeInterval {
+        synchronized(self) { () -> TimeInterval in
             if isRunning {
                 duration = read()
                 running = false
@@ -67,14 +72,16 @@ class StopWatch {
         }
     }
 
-    func read() -> CGFloat {
-        synchronized(self) { () -> CGFloat in
+    /// Reads the current elapsed time.
+    /// - Returns: The current elapsed time.
+    func read() -> TimeInterval {
+        synchronized(self) { () -> TimeInterval in
             if isRunning {
                 let endTime = mach_absolute_time()
                 let elapsed = endTime - startTime
                 let nanos = elapsed * UInt64(info.numer) / UInt64(info.denom)
 
-                return duration + CGFloat(nanos) / CGFloat(NSEC_PER_SEC)
+                return duration + TimeInterval(nanos) / TimeInterval(NSEC_PER_SEC)
             }
             return duration
         }

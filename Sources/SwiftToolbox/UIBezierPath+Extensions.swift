@@ -9,8 +9,9 @@
 import UIKit
 
 extension UIBezierPath {
+    /// Returns a new path that is the same as the current path, but stroked with the current line width, line cap style, line join style, and miter limit
+    /// - Returns: A new path that is the same as the current path, but stroked
     public func strokedPath() -> UIBezierPath {
-        // miterLimit defaults to 10, so use default
         return UIBezierPath(cgPath: cgPath.copy(strokingWithWidth: lineWidth,
                                                 lineCap: lineCapStyle,
                                                 lineJoin: lineJoinStyle,

@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  CGLine.swift
+//
 //
 //  Created by Adam Wulf on 9/6/22.
 //
@@ -10,7 +10,9 @@ import CoreGraphics
 
 /// Represents an infinite line through `p0` and `p1`
 public struct CGLine {
+    /// The first endpoint of the line.
     public var p0: CGPoint
+    /// The second endpoint of the line.
     public var p1: CGPoint
 
     /// Create a new `CGLine` from two endpoints
@@ -24,12 +26,15 @@ public struct CGLine {
         self.p0 = p0
         self.p1 = p1
     }
-    // MARK: Length Property
+
+    /// The length of the line.
     public var length: CGFloat {
         return (p1 - p0).magnitude
     }
 
-    // MARK: Distance to Point
+    /// Returns the distance from the line to the given point.
+    /// - parameter point: The point to measure the distance to.
+    /// - returns: The distance from the line to the given point.
     public func distanceToPoint(point: CGPoint) -> CGFloat {
         let normal = (p1 - p0).normal
         return (point - p0).dot(normal)
@@ -38,7 +43,9 @@ public struct CGLine {
 
 /// Represents an line segment from `start` to `end`
 public struct CGSegment {
+    /// The start of the line segment.
     public var start: CGPoint
+    /// The end of the line segment.
     public var end: CGPoint
 
     /// Create a new `CGSegment` from two endpoints

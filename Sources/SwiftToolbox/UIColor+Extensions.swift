@@ -8,17 +8,24 @@
 #if canImport(UIKit)
 import UIKit
 
-// Adjust a color's brightness to easily make it lighter or darker
-// https://stackoverflow.com/a/42381754/173244
 public extension UIColor {
+    /// Returns a lighter version of the color
+    /// - Parameter percentage: The percentage to lighten the color by
+    /// - Returns: A lighter version of the color
     func lighter(by percentage: CGFloat = 0.3) -> UIColor {
         return self.adjustBrightness(by: abs(percentage))
     }
 
+    /// Returns a darker version of the color
+    /// - Parameter percentage: The percentage to darken the color by
+    /// - Returns: A darker version of the color
     func darker(by percentage: CGFloat = 0.3) -> UIColor {
         return self.adjustBrightness(by: -abs(percentage))
     }
 
+    /// Adjusts the brightness of the color
+    /// - Parameter percentage: The percentage to adjust the brightness by
+    /// - Returns: A color with the adjusted brightness
     func adjustBrightness(by percentage: CGFloat = 0.3) -> UIColor {
         var h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
         if self.getHue(&h, saturation: &s, brightness: &b, alpha: &a) {
