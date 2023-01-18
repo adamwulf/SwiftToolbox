@@ -3,4 +3,4 @@
 # SwiftToolbox
 
 SwiftToolbox adds a number of helpful methods to Swift types.
-Check out [https://adamwulf.github.io/SwiftToolbox/documentation/swifttoolbox/](the documentation).
+Check out [the documentation](https://adamwulf.github.io/SwiftToolbox/documentation/swifttoolbox/).
