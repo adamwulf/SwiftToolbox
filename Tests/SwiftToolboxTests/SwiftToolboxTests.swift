@@ -55,6 +55,28 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(vec2 + vec1, CGVector(30, 30))
     }
 
+    func testTranslation() {
+        let transform1 = CGAffineTransform(translationX: 10, y: 20)
+        XCTAssertEqual(transform1.translation, CGPoint(x: 10, y: 20))
+
+        let transform2 = CGAffineTransform(scaleX: 10, y: 20)
+        XCTAssertEqual(transform2.translation, .zero)
+    }
+
+    func testScale() {
+        let transform1 = CGAffineTransform(translationX: 10, y: 20)
+        XCTAssertEqual(transform1.scale.x, 1.0)
+        XCTAssertEqual(transform1.scale.y, 1.0)
+
+        let transform2 = CGAffineTransform(scaleX: 10, y: 20)
+        XCTAssertEqual(transform2.scale.x, 10.0)
+        XCTAssertEqual(transform2.scale.y, 20.0)
+
+        let transform3 = CGAffineTransform(scaleX: 20, y: 10)
+        XCTAssertEqual(transform3.scale.x, 20.0)
+        XCTAssertEqual(transform3.scale.y, 10.0)
+    }
+
     func testMultVectorOrder() {
         let vec = CGVector(10, 20)
 

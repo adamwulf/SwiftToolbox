@@ -11,10 +11,16 @@ public extension CGAffineTransform {
 
     /// The scale of the transform.
     /// - returns: The scale of the transform.
-    var scale: CGFloat {
-        return sqrt(a * a + c * c)
+    var scale: CGPoint {
+        return CGPoint(x: sqrt(a * a + c * c), y: sqrt(b * b + d * d))
     }
 
+    /// The translation of the transform.
+    /// - returns: The translation of the transform.
+    var translation: CGPoint {
+        return CGPoint(x: tx, y: ty)
+    }
+    
     /// Returns a new transform that is translated by the given point.
     /// - parameter point: The point to translate by.
     /// - returns: A new transform that is translated by the given point.
