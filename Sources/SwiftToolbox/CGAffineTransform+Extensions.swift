@@ -20,7 +20,13 @@ public extension CGAffineTransform {
     var translation: CGPoint {
         return CGPoint(x: tx, y: ty)
     }
-    
+
+    /// The rotation of the transform.
+    /// - returns: The rotation of the transform.
+    var rotation: CGFloat {
+        return atan2(b, a)
+    }
+
     /// Returns a new transform that is translated by the given point.
     /// - parameter point: The point to translate by.
     /// - returns: A new transform that is translated by the given point.

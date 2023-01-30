@@ -76,7 +76,18 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(transform3.scale.x, 20.0)
         XCTAssertEqual(transform3.scale.y, 10.0)
     }
-
+    
+    func testRotation() {
+        let transform = CGAffineTransform(rotationAngle: .pi / 2)
+        XCTAssertEqual(transform.rotation, .pi / 2, accuracy: 0.0001)
+        let transform2 = CGAffineTransform(rotationAngle: .pi)
+        XCTAssertEqual(transform2.rotation, .pi, accuracy: 0.0001)
+        let transform3 = CGAffineTransform(rotationAngle: .pi * 3 / 2)
+        XCTAssertEqual(transform3.rotation, -.pi / 2, accuracy: 0.0001)
+        let transform4 = CGAffineTransform(rotationAngle: .pi * 2)
+        XCTAssertEqual(transform4.rotation, 0, accuracy: 0.0001)
+    }
+    
     func testMultVectorOrder() {
         let vec = CGVector(10, 20)
 
