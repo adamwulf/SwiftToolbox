@@ -76,7 +76,7 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(transform3.scale.x, 20.0)
         XCTAssertEqual(transform3.scale.y, 10.0)
     }
-    
+
     func testRotation() {
         let transform = CGAffineTransform(rotationAngle: .pi / 2)
         XCTAssertEqual(transform.rotation, .pi / 2, accuracy: 0.0001)
@@ -87,7 +87,7 @@ final class SwiftToolboxTests: XCTestCase {
         let transform4 = CGAffineTransform(rotationAngle: .pi * 2)
         XCTAssertEqual(transform4.rotation, 0, accuracy: 0.0001)
     }
-    
+
     func testMultVectorOrder() {
         let vec = CGVector(10, 20)
 
@@ -306,11 +306,11 @@ final class SwiftToolboxTests: XCTestCase {
                                           "available": 2000 - 348,
                                           "limit": 2000]]]
         XCTAssertEqual(String.logfmt(memoryContext), ["memory.current.available=1872",
-                                                         "memory.current.footprint=128",
-                                                         "memory.current.limit=2000",
-                                                         "memory.peak.available=1652",
-                                                         "memory.peak.footprint=348",
-                                                         "memory.peak.limit=2000"].joined(separator: " "))
+                                                      "memory.current.footprint=128",
+                                                      "memory.current.limit=2000",
+                                                      "memory.peak.available=1652",
+                                                      "memory.peak.footprint=348",
+                                                      "memory.peak.limit=2000"].joined(separator: " "))
     }
 
     func testContainsCharacters() {
@@ -330,11 +330,11 @@ final class SwiftToolboxTests: XCTestCase {
     func testPlistEncoding() throws {
         let now = Date()
         let plist: [String: PropertyListCompatible] = ["data": Data([12, 13]),
-                                      "string": "bumble",
-                                      "int": 12,
-                                      "double": 12.2,
-                                      "date": now,
-                                      "array": [1, 2, 3]]
+                                                       "string": "bumble",
+                                                       "int": 12,
+                                                       "double": 12.2,
+                                                       "date": now,
+                                                       "array": [1, 2, 3]]
         let plistData = try PropertyListSerialization.data(fromPropertyList: plist, format: .binary, options: 0)
         guard let readPlist = try PropertyListSerialization.propertyList(from: plistData, format: nil) as? [String: Any] else {
             XCTFail()

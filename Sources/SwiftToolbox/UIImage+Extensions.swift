@@ -13,7 +13,10 @@ public extension UIImage {
     /// - parameter rect: The portion of the image to crop to
     /// - returns: The cropped image
     func cropped(to rect: CGRect) -> UIImage? {
-        let rect = CGRect(x: rect.origin.x * scale, y: rect.origin.y * scale, width: rect.size.width * scale, height: rect.size.height * scale)
+        let rect = CGRect(x: rect.origin.x * scale,
+                          y: rect.origin.y * scale,
+                          width: rect.size.width * scale,
+                          height: rect.size.height * scale)
         guard let cgImage = cgImage?.cropping(to: rect) else {
             return nil
         }
