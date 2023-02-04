@@ -5,6 +5,7 @@
 //  Created by Adam Wulf on 2/4/23.
 //
 
+#if canImport(AppKit)
 import AppKit
 
 public extension NSToolbarItem {
@@ -16,3 +17,4 @@ public extension NSToolbarItem {
         self.action = action
     }
 }
+#endif
