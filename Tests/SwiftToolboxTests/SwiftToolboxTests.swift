@@ -353,6 +353,17 @@ final class SwiftToolboxTests: XCTestCase {
         let str = "Fancy String  with!@#$123"
         XCTAssertEqual(str.filenameSafe, "Fancy-String--with123")
     }
+
+    func testByteSize() {
+        let size = ByteSize.megabyte(3)
+        XCTAssertEqual(size.humanReadable, "3.0 MB")
+    }
+
+    func testProcessInfo() {
+        XCTAssert(ProcessInfo.isUnitTesting)
+        XCTAssertGreaterThan(ProcessInfo.processInfo.memory!.current.limit, .megabyte(3))
+    }
+
 }
 
 extension SwiftToolboxTests {
