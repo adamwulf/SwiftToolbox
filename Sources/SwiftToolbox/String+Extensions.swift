@@ -8,25 +8,25 @@
 import Foundation
 
 /// An extension to the `String` class.
-extension String {
+public extension String {
     /// Trims the characters in the given string from the receiver.
     /// - Parameter chars: The characters to trim.
     /// - Returns: The trimmed string.
-    public func trimmingCharacters(in chars: String) -> String {
+    func trimmingCharacters(in chars: String) -> String {
         return self.trimmingCharacters(in: CharacterSet(charactersIn: chars))
     }
 
     /// Counts the number of occurrences of the given string in the receiver.
     /// - Parameter string: The string to count.
     /// - Returns: The number of occurrences.
-    public func countOccurrences<Target>(of string: Target) -> Int where Target: StringProtocol {
+    func countOccurrences<Target>(of string: Target) -> Int where Target: StringProtocol {
         return components(separatedBy: string).count - 1
     }
 
     /// Counts the number of occurrences of the given character set in the receiver.
     /// - Parameter chars: The character set to count.
     /// - Returns: The number of occurrences.
-    public func countOccurrences(of chars: CharacterSet) -> Int {
+    func countOccurrences(of chars: CharacterSet) -> Int {
         return components(separatedBy: chars).count - 1
     }
 
@@ -34,7 +34,7 @@ extension String {
     /// - Parameter any: The characters to check for.
     /// - Returns: `true` if the receiver contains any of the given characters, `false` otherwise.
     @_disfavoredOverload
-    public func contains(_ any: Character...) -> Bool {
+    func contains(_ any: Character...) -> Bool {
         return any.contains(where: { self.contains($0) })
     }
 
@@ -48,7 +48,7 @@ extension String {
     /// Escapes the given characters in the receiver with a backslash.
     /// - Parameter characters: The characters to escape.
     /// - Returns: The escaped string.
-    public func slashEscape(_ characters: String) -> String {
+    func slashEscape(_ characters: String) -> String {
         var result = ""
         for char in self {
             if char == "\\" {
@@ -65,7 +65,7 @@ extension String {
     /// Finds the indices of the given string in the receiver.
     /// - Parameter occurrence: The string to search for.
     /// - Returns: An array of indices.
-    public func indices(of occurrence: String) -> [Int] {
+    func indices(of occurrence: String) -> [Int] {
         var indices = [Int]()
         var position = startIndex
         while let range = range(of: occurrence, range: position..<endIndex) {
@@ -86,8 +86,14 @@ extension String {
     /// Finds the ranges of the given string in the receiver.
     /// - Parameter searchString: The string to search for.
     /// - Returns: An array of ranges.
-    public func ranges(of searchString: String) -> [Range<String.Index>] {
+    func ranges(of searchString: String) -> [Range<String.Index>] {
         let _indices = indices(of: searchString)
         return _indices.map({ index(startIndex, offsetBy: $0)..<index(startIndex, offsetBy: $0 + searchString.count) })
+    }
+
+    /// Removes all non-alphanumeric characters, and replaces whitespace with `-`
+    var filenameSafe: String {
+        return components(separatedBy: .whitespacesAndNewlines).joined(separator: "-")
+            .components(separatedBy: .alphanumerics.union(CharacterSet(charactersIn: "-")).inverted).joined()
     }
 }

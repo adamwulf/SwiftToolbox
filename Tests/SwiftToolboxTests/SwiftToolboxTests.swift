@@ -348,6 +348,11 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(readPlist["date"] as? Date, now)
         XCTAssertEqual(readPlist["array"] as? [Int], [1, 2, 3])
     }
+
+    func testFilenameSafe() {
+        let str = "Fancy String  with!@#$123"
+        XCTAssertEqual(str.filenameSafe, "Fancy-String--with123")
+    }
 }
 
 extension SwiftToolboxTests {
