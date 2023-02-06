@@ -14,7 +14,7 @@ func synchronized<T>(_ lock: AnyObject, _ body: () throws -> T) rethrows -> T {
 }
 
 /// A class for measuring elapsed time.
-class StopWatch {
+public class StopWatch {
     /// The number of nanoseconds in a second.
     private let NSEC_PER_SEC = 1000000000
 
@@ -27,21 +27,27 @@ class StopWatch {
     /// The timebase info used to calculate elapsed time.
     private var info: mach_timebase_info_data_t
 
+    public static func started() -> StopWatch {
+        let watch = StopWatch()
+        watch.start()
+        return watch
+    }
+
     /// Creates a new `StopWatch` instance.
-    init() {
+    public init() {
         info = mach_timebase_info_data_t()
         mach_timebase_info(&info)
     }
 
     /// A flag to indicate if the stopwatch is running.
-    var isRunning: Bool {
+    public var isRunning: Bool {
         return synchronized(self) { () -> Bool in
             return running
         }
     }
 
     /// Starts the stopwatch.
-    func start() {
+    public func start() {
         synchronized(self) { () -> Void in
             if !isRunning {
                 running = true
@@ -51,7 +57,7 @@ class StopWatch {
     }
 
     /// Resets the stopwatch.
-    func reset() {
+    public func reset() {
         synchronized(self) { () -> Void in
             running = false
             duration = 0
@@ -62,7 +68,7 @@ class StopWatch {
     /// Stops the stopwatch and returns the total duration.
     /// - Returns: The total duration of the stopwatch.
     @discardableResult
-    func stop() -> TimeInterval {
+    public func stop() -> TimeInterval {
         synchronized(self) { () -> TimeInterval in
             if isRunning {
                 duration = read()
@@ -74,7 +80,7 @@ class StopWatch {
 
     /// Reads the current elapsed time.
     /// - Returns: The current elapsed time.
-    func read() -> TimeInterval {
+    public func read() -> TimeInterval {
         synchronized(self) { () -> TimeInterval in
             if isRunning {
                 let endTime = mach_absolute_time()

@@ -9,7 +9,7 @@ import Foundation
 import os
 
 /// A protocol for objects that can be used to emit signposts.
-protocol Signpostable {
+public protocol Signpostable {
     /// The name of the signpost.
     var name: StaticString { get }
     /// Initializes a signpostable object with the given name.
@@ -24,15 +24,15 @@ protocol Signpostable {
 
 /// A struct that wraps the `Signpostable` protocol and provides a fallback for
 /// platforms that don't support `OSSignpost`.
-struct Signpost: Signpostable {
+public struct Signpost: Signpostable {
     /// The signpostable object.
     private let signpost: Signpostable?
     /// The name of the signpost.
-    let name: StaticString
+    public let name: StaticString
 
     /// Initializes a signpostable object with the given name.
     /// - Parameter name: The name of the signpost.
-    init(_ name: StaticString) {
+    public init(_ name: StaticString) {
         self.name = name
         if #available(iOS 15.0, macCatalyst 15.0, macOS 12.0, *) {
             signpost = OSSignpost(name)
@@ -42,13 +42,13 @@ struct Signpost: Signpostable {
     }
 
     /// Finishes the signpost.
-    func finish() {
+    public func finish() {
         signpost?.finish()
     }
 
     /// Emits an event with the given name.
     /// - Parameter event: The name of the event to emit.
-    func emit(event: String) {
+    public func emit(event: String) {
         signpost?.emit(event: event)
     }
 }
