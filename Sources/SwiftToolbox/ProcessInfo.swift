@@ -16,9 +16,7 @@ import os
 
 public extension ProcessInfo {
     /// A flag indicating if the app is running as a unit test.
-    static var isUnitTesting: Bool {
-        return ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
-    }
+    static let isUnitTesting: Bool = ProcessInfo.processInfo.environment.keys.firstIndex(where: { $0.hasPrefix("XCTest") }) != nil
 
     /// A struct representing the memory information of a process.
     struct Memory {
