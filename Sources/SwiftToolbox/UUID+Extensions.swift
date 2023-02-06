@@ -7,9 +7,9 @@
 
 import Foundation
 
-extension UUID {
+public extension UUID {
     /// Creates a simple UUID string consisting only of lowercase hex characters without `-`
-    static func simple() -> String {
+    static func simpleString() -> String {
         return UUID().uuidString.lowercased().replacingOccurrences(of: "-", with: "")
     }
 }
