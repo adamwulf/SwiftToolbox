@@ -10,6 +10,6 @@ import Foundation
 extension UUID {
     /// Creates a simple UUID string consisting only of lowercase hex characters without `-`
     static func simple() -> String {
-        return UUID().uuidString.lowercased().replacingCharacters(in: "-", with: "")
+        return UUID().uuidString.lowercased().replacingOccurrences(of: "-", with: "")
     }
 }
