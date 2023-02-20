@@ -364,6 +364,11 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertGreaterThan(ProcessInfo.processInfo.memory!.current.limit, .megabyte(3))
     }
 
+    func testMerging() {
+        let foo = ["fumble": "bumble"]
+        let bar = ["mumble": "grumble"]
+        XCTAssertEqual(foo.merging(bar), ["fumble": "bumble", "mumble": "grumble"])
+    }
 }
 
 extension SwiftToolboxTests {
