@@ -369,6 +369,21 @@ final class SwiftToolboxTests: XCTestCase {
         let bar = ["mumble": "grumble"]
         XCTAssertEqual(foo.merging(bar), ["fumble": "bumble", "mumble": "grumble"])
     }
+
+#if canImport(UIKit)
+    func testLayoutPriority() {
+        let required: UILayoutPriority = .required
+        let less = required.decrement()
+        let more = required.increment()
+        let evenLess = less.decrement()
+        let moreAgain = evenLess.increment()
+
+        XCTAssertEqual(required, more)
+        XCTAssertGreaterThan(more, less)
+        XCTAssertGreaterThan(less, evenLess)
+        XCTAssertEqual(moreAgain, less)
+    }
+#endif
 }
 
 extension SwiftToolboxTests {
