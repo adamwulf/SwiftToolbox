@@ -33,14 +33,14 @@ public extension UILayoutPriority {
     /// Returns a new `UILayoutPriority` value that is incremented by 1, up to a maximum of `.required`.
     ///
     /// - Returns: A new `UILayoutPriority` value that is incremented by 1.
-    func increment() -> UILayoutPriority {
+    func higher() -> UILayoutPriority {
         return UILayoutPriority(min(UILayoutPriority.required.rawValue, self.rawValue + 1))
     }
 
     /// Returns a new `UILayoutPriority` value that is decremented by 1, down to a minimum of 0.
     ///
     /// - Returns: A new `UILayoutPriority` value that is decremented by 1.
-    func decrement() -> UILayoutPriority {
+    func lower() -> UILayoutPriority {
         return UILayoutPriority(max(0, self.rawValue - 1))
     }
 }

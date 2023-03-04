@@ -373,10 +373,10 @@ final class SwiftToolboxTests: XCTestCase {
 #if canImport(UIKit)
     func testLayoutPriority() {
         let required: UILayoutPriority = .required
-        let less = required.decrement()
-        let more = required.increment()
-        let evenLess = less.decrement()
-        let moreAgain = evenLess.increment()
+        let less = required.lower()
+        let more = required.higher()
+        let evenLess = less.lower()
+        let moreAgain = evenLess.higher()
 
         XCTAssertEqual(required, more)
         XCTAssertGreaterThan(more, less)
