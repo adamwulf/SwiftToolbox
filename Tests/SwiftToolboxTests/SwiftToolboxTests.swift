@@ -211,6 +211,40 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(num.pow(4), 5.0625)
     }
 
+    func testAbs() {
+        XCTAssertEqual(CGFloat(-3).abs(), CGFloat(3))
+        XCTAssertEqual(CGFloat(5).abs(), CGFloat(5))
+        XCTAssertEqual(CGFloat(0).abs(), CGFloat(0))
+    }
+
+    func testSqrt() {
+        XCTAssertEqual(CGFloat(9).sqrt(), CGFloat(3))
+        XCTAssertEqual(CGFloat(4).sqrt(), CGFloat(2))
+        XCTAssertEqual(CGFloat(0).sqrt(), CGFloat(0))
+        XCTAssertNil(CGFloat(-4).sqrt())
+    }
+
+    func testRound() {
+        XCTAssertEqual(CGFloat(4.5).round(), CGFloat(5))
+        XCTAssertEqual(CGFloat(4.4).round(), CGFloat(4))
+        XCTAssertEqual(CGFloat(-4.5).round(), CGFloat(-5))
+        XCTAssertEqual(CGFloat(-4.6).round(), CGFloat(-5))
+    }
+
+    func testCeil() {
+        XCTAssertEqual(CGFloat(4.1).ceil(), CGFloat(5))
+        XCTAssertEqual(CGFloat(4.9).ceil(), CGFloat(5))
+        XCTAssertEqual(CGFloat(-4.1).ceil(), CGFloat(-4))
+        XCTAssertEqual(CGFloat(-4.9).ceil(), CGFloat(-4))
+    }
+
+    func testFloor() {
+        XCTAssertEqual(CGFloat(4.1).floor(), CGFloat(4))
+        XCTAssertEqual(CGFloat(4.9).floor(), CGFloat(4))
+        XCTAssertEqual(CGFloat(-4.1).floor(), CGFloat(-5))
+        XCTAssertEqual(CGFloat(-4.9).floor(), CGFloat(-5))
+    }
+
     func testCountWhere() {
         let nums = [1, 5, 7, 4, 6, 32, 8, 0]
         XCTAssertEqual(nums.count(where: { $0 > 7 }), 2)
