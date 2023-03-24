@@ -292,6 +292,32 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(str3.slashEscape(" "), "asdf\\\\as\\ df")
     }
 
+    func testTrimmingSuffixCharacters() {
+        let string1 = "Hello, world!"
+        let trimmed1 = string1.trimmingSuffixCharacters(in: .punctuationCharacters)
+        XCTAssertEqual(trimmed1, "Hello, world")
+
+        let string2 = "Swift is awesome!!!"
+        let trimmed2 = string2.trimmingSuffixCharacters(in: .punctuationCharacters)
+        XCTAssertEqual(trimmed2, "Swift is awesome")
+
+        let string3 = "No suffix characters here"
+        let trimmed3 = string3.trimmingSuffixCharacters(in: .punctuationCharacters)
+        XCTAssertEqual(trimmed3, "No suffix characters here")
+
+        let string4 = "!!!Hello, world!"
+        let trimmed4 = string4.trimmingSuffixCharacters(in: .punctuationCharacters)
+        XCTAssertEqual(trimmed4, "!!!Hello, world")
+
+        let string5 = "!!!Swift is awesome!!!"
+        let trimmed5 = string5.trimmingSuffixCharacters(in: .punctuationCharacters)
+        XCTAssertEqual(trimmed5, "!!!Swift is awesome")
+
+        let string6 = "!!!No suffix characters here!!!"
+        let trimmed6 = string6.trimmingSuffixCharacters(in: .punctuationCharacters)
+        XCTAssertEqual(trimmed6, "!!!No suffix characters here")
+    }
+
     @available(iOS 13.0, macOS 10.15, *)
     func testLogfmt() {
         class Fumble: CustomDebugStringConvertible {

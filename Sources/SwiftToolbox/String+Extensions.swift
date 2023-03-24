@@ -96,4 +96,18 @@ public extension String {
         return components(separatedBy: .whitespacesAndNewlines).joined(separator: "-")
             .components(separatedBy: .alphanumerics.union(CharacterSet(charactersIn: "-")).inverted).joined()
     }
+
+    /// Returns a new string made by removing from the end of the string all characters contained in a given character set.
+    ///
+    /// - Parameter set: The character set containing the characters to remove.
+    /// - Returns: A new string made by removing from the end of the string all characters contained in `set`.
+    func trimmingSuffixCharacters(in set: CharacterSet) -> String {
+        var endIndex = self.endIndex
+        while endIndex > self.startIndex,
+              let char = self[index(before: endIndex)].unicodeScalars.first,
+              set.contains(char) {
+            endIndex = index(before: endIndex)
+        }
+        return String(self[..<endIndex])
+    }
 }
