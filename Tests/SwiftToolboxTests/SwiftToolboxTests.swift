@@ -318,6 +318,32 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(trimmed6, "!!!No suffix characters here")
     }
 
+    func testRemovePrefix() {
+        let string1 = "hello world"
+        let string2 = "world"
+        let string3 = "hello"
+        let string4 = ""
+
+        XCTAssertEqual(string1.removePrefix("hello "), "world")
+        XCTAssertEqual(string1.removePrefix("world"), "hello world")
+        XCTAssertEqual(string2.removePrefix("hello "), "world")
+        XCTAssertEqual(string3.removePrefix("hello "), "hello")
+        XCTAssertEqual(string4.removePrefix("hello "), "")
+    }
+
+    func testRemoveSuffix() {
+        let string1 = "hello world"
+        let string2 = "world"
+        let string3 = "hello"
+        let string4 = ""
+
+        XCTAssertEqual(string1.removeSuffix(" world"), "hello")
+        XCTAssertEqual(string1.removeSuffix("hello"), "hello world")
+        XCTAssertEqual(string2.removeSuffix(" world"), "world")
+        XCTAssertEqual(string3.removeSuffix(" world"), "hello")
+        XCTAssertEqual(string4.removeSuffix(" world"), "")
+    }
+
     @available(iOS 13.0, macOS 10.15, *)
     func testLogfmt() {
         class Fumble: CustomDebugStringConvertible {
