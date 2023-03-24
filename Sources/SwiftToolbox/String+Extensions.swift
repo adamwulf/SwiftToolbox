@@ -115,7 +115,7 @@ public extension String {
     ///
     /// - Parameter prefix: The prefix to remove.
     /// - Returns: A new string made by removing the specified prefix from the original string, or the original string if it does not start with the specified prefix.
-    func removePrefix(_ prefix: String) -> String {
+    func removingPrefix(_ prefix: String) -> String {
         guard self.hasPrefix(prefix) else { return self }
         return String(self.dropFirst(prefix.count))
     }
@@ -124,8 +124,24 @@ public extension String {
     ///
     /// - Parameter suffix: The suffix to remove.
     /// - Returns: A new string made by removing the specified suffix from the original string, or the original string if it does not end with the specified suffix.
-    func removeSuffix(_ suffix: String) -> String {
+    func removingSuffix(_ suffix: String) -> String {
         guard self.hasSuffix(suffix) else { return self }
         return String(self.dropLast(suffix.count))
+    }
+
+    /// Removes the specified prefix from the original string.
+    ///
+    /// - Parameter prefix: The prefix to remove.
+    mutating func removePrefix(_ prefix: String) {
+        guard self.hasPrefix(prefix) else { return }
+        self = removingPrefix(prefix)
+    }
+
+    /// Removes the specified suffix from the original string.
+    ///
+    /// - Parameter suffix: The suffix to remove.
+    mutating func removeSuffix(_ suffix: String) {
+        guard self.hasSuffix(suffix) else { return }
+        self = removingSuffix(suffix)
     }
 }

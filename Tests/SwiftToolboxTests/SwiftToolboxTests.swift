@@ -318,30 +318,68 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(trimmed6, "!!!No suffix characters here")
     }
 
-    func testRemovePrefix() {
+    func testRemovingPrefix() {
         let string1 = "hello world"
         let string2 = "world"
         let string3 = "hello"
         let string4 = ""
 
-        XCTAssertEqual(string1.removePrefix("hello "), "world")
-        XCTAssertEqual(string1.removePrefix("world"), "hello world")
-        XCTAssertEqual(string2.removePrefix("hello "), "world")
-        XCTAssertEqual(string3.removePrefix("hello "), "hello")
-        XCTAssertEqual(string4.removePrefix("hello "), "")
+        XCTAssertEqual(string1.removingPrefix("hello "), "world")
+        XCTAssertEqual(string1.removingPrefix("world"), "hello world")
+        XCTAssertEqual(string2.removingPrefix("hello "), "world")
+        XCTAssertEqual(string3.removingPrefix("hello "), "hello")
+        XCTAssertEqual(string4.removingPrefix(""), "")
+    }
+
+    func testRemovingSuffix() {
+        let string1 = "hello world"
+        let string2 = "world"
+        let string3 = "hello"
+        let string4 = ""
+
+        XCTAssertEqual(string1.removingSuffix(" world"), "hello")
+        XCTAssertEqual(string1.removingSuffix("hello"), "hello world")
+        XCTAssertEqual(string2.removingSuffix(" world"), "world")
+        XCTAssertEqual(string3.removingSuffix(" world"), "hello")
+        XCTAssertEqual(string4.removingSuffix(" world"), "")
+    }
+
+    func testRemovePrefix() {
+        var string1 = "hello world"
+        var string2 = "world"
+        var string3 = "hello"
+        var string4 = ""
+
+        string1.removePrefix("hello ")
+        XCTAssertEqual(string1, "world")
+
+        string2.removePrefix("hello ")
+        XCTAssertEqual(string2, "world")
+
+        string3.removePrefix("hello ")
+        XCTAssertEqual(string3, "hello")
+
+        string4.removePrefix("")
+        XCTAssertEqual(string4, "")
     }
 
     func testRemoveSuffix() {
-        let string1 = "hello world"
-        let string2 = "world"
-        let string3 = "hello"
-        let string4 = ""
+        var string1 = "hello world"
+        var string2 = "world"
+        var string3 = "hello"
+        var string4 = ""
 
-        XCTAssertEqual(string1.removeSuffix(" world"), "hello")
-        XCTAssertEqual(string1.removeSuffix("hello"), "hello world")
-        XCTAssertEqual(string2.removeSuffix(" world"), "world")
-        XCTAssertEqual(string3.removeSuffix(" world"), "hello")
-        XCTAssertEqual(string4.removeSuffix(" world"), "")
+        string1.removeSuffix(" world")
+        XCTAssertEqual(string1, "hello")
+
+        string2.removeSuffix(" world")
+        XCTAssertEqual(string2, "world")
+
+        string3.removeSuffix(" world")
+        XCTAssertEqual(string3, "hello")
+
+        string4.removeSuffix(" world")
+        XCTAssertEqual(string4, "")
     }
 
     @available(iOS 13.0, macOS 10.15, *)
