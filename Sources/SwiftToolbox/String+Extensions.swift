@@ -1,6 +1,6 @@
 //
 //  String+Extensions.swift
-//  
+//
 //
 //  Created by Adam Wulf on 4/16/21.
 //
@@ -62,9 +62,21 @@ public extension String {
         return result
     }
 
-    /// Finds the indices of the given string in the receiver.
-    /// - Parameter occurrence: The string to search for.
-    /// - Returns: An array of indices.
+    func slashEscape(_ characters: CharacterSet) -> String {
+        var result = ""
+        for char in self {
+            if char == "\\" {
+                result += "\\\\"
+            } else if let scalar = char.unicodeScalars.first,
+               characters.contains(scalar) {
+                result += "\\\(char)"
+            } else {
+                result += String(char)
+            }
+        }
+        return result
+    }
+
     func indices(of occurrence: String) -> [Int] {
         var indices = [Int]()
         var position = startIndex
