@@ -499,9 +499,26 @@ final class SwiftToolboxTests: XCTestCase {
     }
 
     func testMerging() {
-        let foo = ["fumble": "bumble"]
-        let bar = ["mumble": "grumble"]
-        XCTAssertEqual(foo.merging(bar), ["fumble": "bumble", "mumble": "grumble"])
+        let dict1 = ["a": 1, "b": 2, "c": 3]
+        let dict2 = ["b": 4, "d": 5]
+        let mergedDict = dict1.merging(dict2)
+        XCTAssertEqual(mergedDict, ["a": 1, "b": 2, "c": 3, "d": 5])
+    }
+
+    func testMapValues() {
+        let dict = ["a": 1, "b": 2, "c": 3]
+        let transformedDict = dict.mapValues { _, value in
+            return value * 2
+        }
+        XCTAssertEqual(transformedDict, ["a": 2, "b": 4, "c": 6])
+    }
+
+    func testCompactMapValues() {
+        let dict = ["a": 1, "b": 2, "c": 3]
+        let transformedDict = dict.compactMapValues { _, value in
+            return value % 2 == 0 ? value * 2 : nil
+        }
+        XCTAssertEqual(transformedDict, ["b": 4])
     }
 
 #if canImport(UIKit)
