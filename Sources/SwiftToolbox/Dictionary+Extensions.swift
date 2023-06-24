@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Adam Wulf on 2/19/23.
 //
@@ -28,6 +28,20 @@ public extension Dictionary {
         var result: [Key: T] = [:]
         for (key, value) in self {
             result[key] = try transform(key, value)
+        }
+        return result
+    }
+
+    /// Returns a new dictionary with the same values as this dictionary, but with each key transformed by the given closure.
+    ///
+    /// - Parameters:
+    ///   - transform: A closure that takes a key-value pair of this dictionary as its argument and returns a transformed key.
+    /// - Returns: A new dictionary with the same values as this dictionary, but with each key transformed by the given closure.
+    func mapKeys<T: Hashable>(_ transform: (Key, Value) throws -> T) rethrows -> [T: Value] {
+        var result: [T: Value] = [:]
+        for (key, value) in self {
+            let transformedKey = try transform(key, value)
+            result[transformedKey] = value
         }
         return result
     }

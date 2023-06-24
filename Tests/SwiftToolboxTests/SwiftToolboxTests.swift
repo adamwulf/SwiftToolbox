@@ -513,6 +513,16 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(transformedDict, ["a": 2, "b": 4, "c": 6])
     }
 
+    func testMapKeys() {
+        let dictionary = ["apple": 1, "banana": 2, "orange": 3]
+
+        let transformedDictionary = dictionary.mapKeys { key, _ in
+            return key.uppercased()
+        }
+
+        XCTAssertEqual(transformedDictionary, ["APPLE": 1, "BANANA": 2, "ORANGE": 3])
+    }
+
     func testCompactMapValues() {
         let dict = ["a": 1, "b": 2, "c": 3]
         let transformedDict = dict.compactMapValues { _, value in
