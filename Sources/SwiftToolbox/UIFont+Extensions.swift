@@ -5,6 +5,7 @@
 //  Created by Adam Wulf on 8/5/23.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 /// This extension provides additional functionality to the UIFont class.
@@ -54,3 +55,4 @@ public extension UIFont {
         return UIFont(descriptor: fontDescriptor, size: max(1, fontDescriptor.pointSize - 1))
     }
 }
+#endif
