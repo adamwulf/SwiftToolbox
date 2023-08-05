@@ -10,8 +10,7 @@ import UIKit
 /// This extension provides additional functionality to the UIFont class.
 /// It allows for easy modification of font traits such as bold and italic,
 /// as well as adjusting the font size.
-extension UIFont {
-
+public extension UIFont {
     /// This private method adds a given trait to the font.
     /// If the trait cannot be added, it returns the original font.
     ///
