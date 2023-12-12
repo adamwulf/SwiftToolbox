@@ -8,7 +8,7 @@
 import CoreGraphics
 
 /// Helper methods for `CGContext`
-extension CGContext {
+public extension CGContext {
     /// Saves the `CGContext` graphics state before running the input `actions` block. Restores the state after the block.
     /// - parameter actions: The block to run after the saved state and before restoring.
     func saveRestore(actions: () -> Void) {
