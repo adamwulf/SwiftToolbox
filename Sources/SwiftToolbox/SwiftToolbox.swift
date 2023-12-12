@@ -8,13 +8,20 @@
 import Foundation
 
 public struct SwiftToolbox {
-    public enum LogLevel: Int {
+    public enum LogLevel: Int, Comparable {
         case verbose
         case debug
         case info
         case warning
         case error
+
+        public static func < (lhs: SwiftToolbox.LogLevel, rhs: SwiftToolbox.LogLevel) -> Bool {
+            return lhs.rawValue < rhs.rawValue
+        }
     }
 
-    public static var log: ((_ level: LogLevel, _ message: String, _ context: [String: Any]) -> Void)?
+    public static var log: ((_ level: LogLevel, _ message: String, _ file: String, _ function: String, _ line: Int, _ context: [String: Any]) -> Void)?
+    static func log(level: LogLevel, message: String, file: String = #file, function: String = #function, line: Int = #line, context: [String: Any]) {
+        Self.log?(level, message, file, function, line, context)
+    }
 }
