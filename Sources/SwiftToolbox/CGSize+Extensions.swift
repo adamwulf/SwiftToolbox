@@ -36,13 +36,13 @@ extension CGSize {
     // MARK: - Min / Max
 
     /// The minimum of the `width` and `height` of the `CGSize`
-    public var min: CGFloat {
-        return Swift.min(width, height)
+    public var minDim: CGFloat {
+        return min(width, height)
     }
 
     /// The maximum of the `width` and `height` of the `CGSize`
-    public var max: CGFloat {
-        return Swift.max(width, height)
+    public var maxDim: CGFloat {
+        return max(width, height)
     }
 
     // MARK: - Scale
