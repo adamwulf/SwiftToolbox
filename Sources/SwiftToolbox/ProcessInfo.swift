@@ -21,15 +21,20 @@ public extension ProcessInfo {
 
     /// A struct representing the memory information of a process.
     struct Memory {
+        public init(footprint: ByteSize, available: ByteSize, limit: ByteSize) {
+            self.footprint = footprint
+            self.available = available
+            self.limit = limit
+        }
         /// The memory footprint of the process
-        let footprint: ByteSize
+        public let footprint: ByteSize
         /// The available memory for the process
-        let available: ByteSize
+        public let available: ByteSize
         /// The total available memory process. This is the sum of both `footprint` and `avaialable`
-        let limit: ByteSize
+        public let limit: ByteSize
 
         /// Returns the memory information as a dictionary of human-readable strings.
-        var loggingContext: [String: String] {
+        public var loggingContext: [String: String] {
             return ["footprint": self.footprint.humanReadable,
                     "available": self.available.humanReadable,
                     "limit": self.limit.humanReadable]
