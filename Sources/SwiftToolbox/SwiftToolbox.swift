@@ -20,8 +20,8 @@ public struct SwiftToolbox {
         }
     }
 
-    public static var log: ((_ level: LogLevel, _ message: String, _ file: String, _ function: String, _ line: Int, _ context: [String: Any]) -> Void)?
+    public static var logHandler: ((_ level: LogLevel, _ message: String, _ file: String, _ function: String, _ line: Int, _ context: [String: Any]) -> Void)?
     static func log(level: LogLevel, message: String, file: String = #file, function: String = #function, line: Int = #line, context: [String: Any]) {
-        Self.log?(level, message, file, function, line, context)
+        Self.logHandler?(level, message, file, function, line, context)
     }
 }
