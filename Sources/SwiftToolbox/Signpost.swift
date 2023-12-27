@@ -70,10 +70,10 @@ public struct Signpost: Signpostable {
 
     /// Finishes the signpost.
     public func finish(context: [String: Any]? = nil,
-                file: String = #file,
-                function: String = #function,
-                line: Int = #line,
-                level: SwiftToolbox.LogLevel? = nil) {
+                       file: String = #file,
+                       function: String = #function,
+                       line: Int = #line,
+                       level: SwiftToolbox.LogLevel? = nil) {
         signpost?.finish(context: context, file: file, function: function, line: line, level: level)
         let duration = stopwatch.stop()
         Self.queue.async {
@@ -96,11 +96,11 @@ public struct Signpost: Signpostable {
     /// Emits an event with the given name.
     /// - Parameter event: The name of the event to emit.
     public func emit(event: String,
-              context: [String: Any]? = nil,
-              file: String = #file,
-              function: String = #function,
-              line: Int = #line,
-              level: SwiftToolbox.LogLevel? = nil) {
+                     context: [String: Any]? = nil,
+                     file: String = #file,
+                     function: String = #function,
+                     line: Int = #line,
+                     level: SwiftToolbox.LogLevel? = nil) {
         signpost?.emit(event: event, context: context, file: file, function: function, line: line, level: level)
         let duration = stopwatch.read()
         Self.queue.async {
@@ -113,11 +113,11 @@ public struct Signpost: Signpostable {
             let level: SwiftToolbox.LogLevel = duration >= limit ? max(.warning, level ?? self.level) : (level ?? self.level)
             let signpostCtx: [String: Any] = ["name": name, "event": event, "status": "running", "duration": duration].merging(idContext)
             SwiftToolbox.log(level: level,
-                       message: "signpost",
-                       file: file,
-                       function: function,
-                       line: line,
-                       context: signpostCtx.merging(context ?? [:]))
+                             message: "signpost",
+                             file: file,
+                             function: function,
+                             line: line,
+                             context: signpostCtx.merging(context ?? [:]))
         }
     }
 }
@@ -160,7 +160,12 @@ final class OSSignpost: Signpostable {
 
     /// Emits an event with the given name.
     /// - Parameter event: The name of the event to emit.
-    func emit(event: String, context: [String: Any]? = nil, file: String, function: String, line: Int, level: SwiftToolbox.LogLevel? = nil) {
+    func emit(event: String,
+              context: [String: Any]? = nil,
+              file: String,
+              function: String,
+              line: Int,
+              level: SwiftToolbox.LogLevel? = nil) {
         guard !finished else {
             SwiftToolbox.log(level: .warning,
                              message: "signpost",
