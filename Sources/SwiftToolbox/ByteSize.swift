@@ -43,27 +43,27 @@ public enum ByteSize: RawRepresentable, AdditiveArithmetic, Comparable, CustomSt
     }
 
     /// The number of bytes in the `ByteSize` as an `Int`
-    var bytes: Int {
+    public var bytes: Int {
         return rawValue
     }
 
     /// The number of kilobytes in the `ByteSize` as an `Int`
-    var KBs: Int {
+    public var KBs: Int {
         return rawValue / ByteSize.kilobyte().rawValue
     }
 
     /// The number of megabytes in the `ByteSize` as an `Int`
-    var MBs: Int {
+    public var MBs: Int {
         return rawValue / ByteSize.megabyte().rawValue
     }
 
     /// The number of gigabytes in the `ByteSize` as an `Int`
-    var GBs: Int {
+    public var GBs: Int {
         return rawValue / ByteSize.gigabyte().rawValue
     }
 
     /// The `ByteSize` represented as a human-readable string
-    var humanReadable: String {
+    public var humanReadable: String {
         if GBs != 0 {
             let GBWithRemainder: Float = Float(MBs - GBs * 1024) / 1024 + Float(GBs)
 
@@ -82,25 +82,25 @@ public enum ByteSize: RawRepresentable, AdditiveArithmetic, Comparable, CustomSt
     }
 
     /// Converts the byte size to a human-readable string in GB
-    var humanGBs: String {
+    public var humanGBs: String {
         let GBWithRemainder: Float = Float(MBs - GBs * 1024) / 1024 + Float(GBs)
         return "\(String(format: "%.1f", GBWithRemainder)) GB"
     }
 
     /// Converts the byte size to a human-readable string in MB
-    var humanMBs: String {
+    public var humanMBs: String {
         let MBWithRemainder: Float = Float(KBs - MBs * 1024) / 1024 + Float(MBs)
         return "\(String(format: "%.1f", MBWithRemainder)) MB"
     }
 
     /// Converts the byte size to a human-readable string in KB
-    var humanKBs: String {
+    public var humanKBs: String {
         let KBWithRemainder: Float = Float(rawValue - KBs * 1024) / 1024 + Float(KBs)
         return "\(String(format: "%.1f", KBWithRemainder)) KB"
     }
 
     /// Converts the byte size to a human-readable string in B
-    var humanBs: String {
+    public var humanBs: String {
         return "\(rawValue) B"
     }
 
@@ -135,29 +135,29 @@ public enum ByteSize: RawRepresentable, AdditiveArithmetic, Comparable, CustomSt
     }
 
     /// Returns the modulo of two byte sizes
-    static func % (lhs: ByteSize, rhs: ByteSize) -> ByteSize {
+    public static func % (lhs: ByteSize, rhs: ByteSize) -> ByteSize {
         return ByteSize.byte(lhs.rawValue % rhs.rawValue)
     }
 
     // MARK: CGFloat Arithmetic
 
     /// Multiplies a byte size by a CGFloat
-    static func * (lhs: ByteSize, rhs: CGFloat) -> ByteSize {
+    public static func * (lhs: ByteSize, rhs: CGFloat) -> ByteSize {
         return ByteSize.byte(Int(CGFloat(lhs.rawValue) * rhs))
     }
 
     /// Divides a byte size by a CGFloat
-    static func / (lhs: ByteSize, rhs: CGFloat) -> ByteSize {
+    public static func / (lhs: ByteSize, rhs: CGFloat) -> ByteSize {
         return lhs * (1 / rhs)
     }
 
     /// Multiplies a byte size by an Int
-    static func * (lhs: ByteSize, rhs: Int) -> ByteSize {
+    public static func * (lhs: ByteSize, rhs: Int) -> ByteSize {
         return ByteSize.byte(lhs.rawValue * rhs)
     }
 
     /// Divides a byte size by an Int
-    static func / (lhs: ByteSize, rhs: Int) -> ByteSize {
+    public static func / (lhs: ByteSize, rhs: Int) -> ByteSize {
         return ByteSize.byte(lhs.rawValue / rhs)
     }
 

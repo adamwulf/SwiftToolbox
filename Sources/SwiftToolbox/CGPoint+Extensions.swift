@@ -4,7 +4,6 @@
 //
 //  Created by Adam Wulf on 4/11/21.
 //
-// swiftlint:disable shorthand_operator
 
 import CoreGraphics
 
@@ -93,13 +92,13 @@ extension CGPoint {
 
     /// Calculates the minimum of the x and y coordinates
     /// - Returns: The minimum of the x and y coordinates
-    public var min: CGFloat {
+    public var minDim: CGFloat {
         return Swift.min(x, y)
     }
 
     /// Calculates the maximum of the x and y coordinates
     /// - Returns: The maximum of the x and y coordinates
-    public var max: CGFloat {
+    public var maxDim: CGFloat {
         return Swift.max(x, y)
     }
 

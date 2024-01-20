@@ -21,15 +21,20 @@ public extension ProcessInfo {
 
     /// A struct representing the memory information of a process.
     struct Memory {
+        public init(footprint: ByteSize, available: ByteSize, limit: ByteSize) {
+            self.footprint = footprint
+            self.available = available
+            self.limit = limit
+        }
         /// The memory footprint of the process
-        let footprint: ByteSize
+        public let footprint: ByteSize
         /// The available memory for the process
-        let available: ByteSize
+        public let available: ByteSize
         /// The total available memory process. This is the sum of both `footprint` and `avaialable`
-        let limit: ByteSize
+        public let limit: ByteSize
 
         /// Returns the memory information as a dictionary of human-readable strings.
-        var loggingContext: [String: String] {
+        public var loggingContext: [String: String] {
             return ["footprint": self.footprint.humanReadable,
                     "available": self.available.humanReadable,
                     "limit": self.limit.humanReadable]
@@ -67,7 +72,15 @@ public extension ProcessInfo {
             #elseif targetEnvironment(macCatalyst)
                 return max(.zero, (ByteSize(ProcessInfo.processInfo.physicalMemory) ?? .zero) - footprint)
             #else
-                return ByteSize(rawValue: os_proc_available_memory())
+                if #available(iOS 13.0, *) {
+                    return ByteSize(rawValue: os_proc_available_memory())
+                } else {
+                    // Fallback on earlier versions
+                    // use `ProcessInfo.processInfo.physicalMemory` to get the total physical memory
+                    // But there's no direct alternative for available memory in earlier versions
+                    let physicalMemory = ProcessInfo.processInfo.physicalMemory
+                    return ByteSize(rawValue: Int(physicalMemory))
+                }
             #endif
         #else
             return max(.zero, (ByteSize(ProcessInfo.processInfo.physicalMemory) ?? .zero) - footprint)
