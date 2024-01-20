@@ -6,7 +6,7 @@
       "location" : "https://github.com/themomax/swift-docc-plugin",
       "state" : {
         "branch" : "add-extended-types-flag",
-        "revision" : "a1f53399f3e07314a8707c2434952badbe6aa423"
+        "revision" : "c234e513e501a91e80a3d1e3e5e274cb21c59d7f"
       }
     },
     {
@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-docc-symbolkit",
       "state" : {
-        "branch" : "main",
-        "revision" : "b45d1f2ed151d057b54504d653e0da5552844e34"
+        "revision" : "b45d1f2ed151d057b54504d653e0da5552844e34",
+        "version" : "1.0.0"
       }
     }
   ],

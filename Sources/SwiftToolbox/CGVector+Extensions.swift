@@ -81,6 +81,29 @@ extension CGVector {
         return theta
     }
 
+    /// Calculates the angle between this vector and another vector.
+    ///
+    /// The angle is measured in radians, in the range (-π, π].
+    ///
+    /// - Parameter otherVector: The other vector to measure the angle against.
+    /// - Returns: The angle between the two vectors, in radians.
+    public func angleBetween(_ otherVector: CGVector) -> CGFloat {
+        let thetaA = atan2(otherVector.dx, otherVector.dy)
+        let thetaB = atan2(self.dx, self.dy)
+
+        var thetaAB = thetaB - thetaA
+
+        while thetaAB <= -CGFloat.pi {
+            thetaAB += 2 * CGFloat.pi
+        }
+
+        while thetaAB > CGFloat.pi {
+            thetaAB -= 2 * CGFloat.pi
+        }
+
+        return thetaAB
+    }
+
     /// Scales the vector to the given `target` length.
     /// - Parameter target: The target length of the vector.
     /// - Returns: The scaled vector.
@@ -93,6 +116,7 @@ extension CGVector {
     public var normal: CGVector {
         return CGVector(dx: -self.dy, dy: self.dx)
     }
+
     // MARK: - Prefixes
 
     /// Negates the vector.
