@@ -72,7 +72,15 @@ public extension ProcessInfo {
             #elseif targetEnvironment(macCatalyst)
                 return max(.zero, (ByteSize(ProcessInfo.processInfo.physicalMemory) ?? .zero) - footprint)
             #else
-                return ByteSize(rawValue: os_proc_available_memory())
+                if #available(iOS 13.0, *) {
+                    return ByteSize(rawValue: os_proc_available_memory())
+                } else {
+                    // Fallback on earlier versions
+                    // use `ProcessInfo.processInfo.physicalMemory` to get the total physical memory
+                    // But there's no direct alternative for available memory in earlier versions
+                    let physicalMemory = ProcessInfo.processInfo.physicalMemory
+                    return ByteSize(rawValue: Int(physicalMemory))
+                }
             #endif
         #else
             return max(.zero, (ByteSize(ProcessInfo.processInfo.physicalMemory) ?? .zero) - footprint)
