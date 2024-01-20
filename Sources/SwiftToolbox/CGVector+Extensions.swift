@@ -25,6 +25,22 @@ extension CGVector {
         self.init(dx: cos(theta), dy: sin(theta))
     }
 
+    /// Initializes a new vector from a start point to an end point.
+    public init(start: CGPoint, end: CGPoint) {
+        self.init(dx: end.x - start.x, dy: end.y - start.y)
+    }
+
+    // MARK: - Flip
+
+    public mutating func flip() {
+        self.dx = -self.dx
+        self.dy = -self.dy
+    }
+
+    public func flipped() -> CGVector {
+        return CGVector(dx: -self.dx, dy: -self.dy)
+    }
+
     // MARK: - Min / Max
 
     /// The minimum component of the vector.
