@@ -31,6 +31,10 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(CGVector(dx: 0, dy: 1).theta, CGFloat.pi / 2)
         XCTAssertEqual(CGVector(dx: 0, dy: -1).theta, -CGFloat.pi / 2)
         XCTAssertEqual(CGVector(dx: -1, dy: 0).theta, CGFloat.pi)
+
+        let anyVec = CGVector(dx: 0.25, dy: 0.75)
+        let flatVec = CGVector(dx: 1, dy: 0)
+        XCTAssertEqual(anyVec.theta, flatVec.angleBetween(anyVec))
     }
 
     func testCGVectorMag() {
