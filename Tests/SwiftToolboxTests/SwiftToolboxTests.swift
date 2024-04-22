@@ -535,6 +535,18 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(transformedDict, ["b": 4])
     }
 
+    func testStopWatch() {
+        let exp = expectation(description: "\(#function)\(#line)")
+        let stopwatch = StopWatch.started()
+        DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(500)) {
+            stopwatch.stop()
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1000)
+
+        XCTAssertEqual(Int(stopwatch.read() * 1000), 500, accuracy: 20)
+    }
+
 #if canImport(UIKit)
     func testLayoutPriority() {
         let required: UILayoutPriority = .required

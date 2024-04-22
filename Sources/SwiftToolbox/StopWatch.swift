@@ -21,11 +21,9 @@ public class StopWatch {
     /// A flag to indicate if the stopwatch is running.
     private var running = false
     /// The start time of the stopwatch.
-    private var startTime: UInt64 = 0
+    private var startTime: DispatchTime = .distantFuture
     /// The total duration of the stopwatch.
     private var duration: TimeInterval = 0
-    /// The timebase info used to calculate elapsed time.
-    private var info: mach_timebase_info_data_t
 
     public static func started() -> StopWatch {
         let watch = StopWatch()
@@ -35,8 +33,7 @@ public class StopWatch {
 
     /// Creates a new `StopWatch` instance.
     public init() {
-        info = mach_timebase_info_data_t()
-        mach_timebase_info(&info)
+        // noop
     }
 
     /// A flag to indicate if the stopwatch is running.
@@ -51,7 +48,7 @@ public class StopWatch {
         synchronized(self) { () -> Void in
             if !isRunning {
                 running = true
-                startTime = mach_absolute_time()
+                startTime = DispatchTime.now()
             }
         }
     }
@@ -61,7 +58,7 @@ public class StopWatch {
         synchronized(self) { () -> Void in
             running = false
             duration = 0
-            startTime = 0
+            startTime = .distantFuture
         }
     }
 
@@ -83,13 +80,39 @@ public class StopWatch {
     public func read() -> TimeInterval {
         synchronized(self) { () -> TimeInterval in
             if isRunning {
-                let endTime = mach_absolute_time()
-                let elapsed = endTime - startTime
-                let nanos = elapsed * UInt64(info.numer) / UInt64(info.denom)
+                let endTime = DispatchTime.now()
+                let elapsed: TimeInterval = {
+                    if #available(macOS 10.15, *) {
+                        return TimeInterval(dispatchTimeInterval: self.startTime.distance(to: endTime))
+                    } else {
+                        // Fallback on earlier versions
+                        return TimeInterval(endTime.rawValue - self.startTime.rawValue)
+                    }
+                }()
 
-                return duration + TimeInterval(nanos) / TimeInterval(NSEC_PER_SEC)
+                return duration + elapsed
             }
             return duration
         }
     }
+}
+
+private extension TimeInterval {
+    init(dispatchTimeInterval: DispatchTimeInterval) {
+        switch dispatchTimeInterval {
+        case .seconds(let value):
+            self = Double(value)
+        case .milliseconds(let value):
+            self = Double(value) / 1_000
+        case .microseconds(let value):
+            self = Double(value) / 1_000_000
+        case .nanoseconds(let value):
+            self = Double(value) / 1_000_000_000
+        case .never:
+            self = 0
+        @unknown default:
+            fatalError("Unknown case \(dispatchTimeInterval)")
+        }
+    }
+
 }
