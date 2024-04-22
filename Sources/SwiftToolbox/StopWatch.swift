@@ -82,7 +82,7 @@ public class StopWatch {
             if isRunning {
                 let endTime = DispatchTime.now()
                 let elapsed: TimeInterval = {
-                    if #available(macOS 10.15, *) {
+                    if #available(iOS 13.0, macOS 10.15, *) {
                         return TimeInterval(dispatchTimeInterval: self.startTime.distance(to: endTime))
                     } else {
                         // Fallback on earlier versions
