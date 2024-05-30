@@ -492,6 +492,12 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(str.filenameSafe, "Fancy-String--with123")
     }
 
+    func testFileExtension() {
+        XCTAssertEqual("fumble.png".pathExtension, "png")
+        XCTAssertEqual("fumble".pathExtension, "")
+        XCTAssertEqual("fumble.foo.png".pathExtension, "png")
+    }
+
     func testByteSize() {
         let size = ByteSize.megabyte(3)
         XCTAssertEqual(size.humanReadable, "3.0 MB")

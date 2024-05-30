@@ -9,6 +9,12 @@ import Foundation
 
 /// An extension to the `String` class.
 public extension String {
+    /// A computed property that returns the path extension of the string.
+    /// - Returns: The path extension if it exists, otherwise an empty string.
+    var pathExtension: String {
+        return (self as NSString).pathExtension
+    }
+
     /// Trims the characters in the given string from the receiver.
     /// - Parameter chars: The characters to trim.
     /// - Returns: The trimmed string.
