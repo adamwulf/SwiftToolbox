@@ -80,7 +80,7 @@ extension CGPoint {
         let direction = (p1 - p0).unitVector
         let lhs = self - p0
         let length = p0.distance(to: p1)
-        let dot = Swift.min(length, Swift.max(0, lhs.dot(direction)))
+        let dot = min(length, max(0, lhs.dot(direction)))
         return p0 + direction * dot
     }
 
@@ -93,13 +93,13 @@ extension CGPoint {
     /// Calculates the minimum of the x and y coordinates
     /// - Returns: The minimum of the x and y coordinates
     public var minDim: CGFloat {
-        return Swift.min(x, y)
+        return min(x, y)
     }
 
     /// Calculates the maximum of the x and y coordinates
     /// - Returns: The maximum of the x and y coordinates
     public var maxDim: CGFloat {
-        return Swift.max(x, y)
+        return max(x, y)
     }
 
     // MARK: - Prefix
