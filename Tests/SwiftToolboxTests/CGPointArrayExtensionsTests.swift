@@ -40,4 +40,18 @@ class CGPointArrayExtensionsTests: XCTestCase {
         let points = [CGPoint(x: 0, y: 0), CGPoint(x: 1, y: 0), CGPoint(x: 1, y: 1), CGPoint(x: 0, y: 1)]
         XCTAssertTrue(points.isClockwise())
     }
+
+    func testConvexHull1() {
+        let points = [CGPoint(x: 0, y: 0), CGPoint(x: 0.5, y: -1), CGPoint(x: 1, y: 0), CGPoint(x: 1, y: 1), CGPoint(x: 0, y: 1)]
+        let hull = points.convexHull()
+        let expectedHull = [CGPoint(x: 0.5, y: -1), CGPoint(x: 1, y: 0), CGPoint(x: 1, y: 1), CGPoint(x: 0, y: 1), CGPoint(x: 0, y: 0)]
+        XCTAssertEqual(hull, expectedHull)
+    }
+
+    func testConvexHull2() {
+        let points = [CGPoint(x: 0, y: 0), CGPoint(x: 0.5, y: 0.5), CGPoint(x: 1, y: 0), CGPoint(x: 1, y: 1), CGPoint(x: 0, y: 1)]
+        let hull = points.convexHull()
+        let expectedHull = [CGPoint(x: 0, y: 0), CGPoint(x: 1, y: 0), CGPoint(x: 1, y: 1), CGPoint(x: 0, y: 1)]
+        XCTAssertEqual(hull, expectedHull)
+    }
 }

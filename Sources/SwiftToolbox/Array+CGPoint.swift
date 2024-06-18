@@ -10,6 +10,34 @@ import CoreGraphics
 
 /// Provides extensions for arrays of CGPoint for geometric calculations.
 public extension Array where Element == CGPoint {
+
+    /// Calculates the convex hull of the points using the Graham scan algorithm.
+    /// - Returns: An array of CGPoint representing the convex hull in counter-clockwise order.
+    func convexHull() -> [CGPoint] {
+        guard count >= 3 else { return self }
+
+        let sortedPoints = self.sorted {
+            if $0.y == $1.y {
+                return $0.x < $1.x
+            }
+            return $0.y < $1.y
+        }
+
+        let p0 = sortedPoints[0]
+        let sortedByAngle = sortedPoints[1...].sorted {
+            cross(p0, $0, $1) > 0
+        }
+
+        var hull = [p0]
+        for point in sortedByAngle {
+            while hull.count > 1 && cross(hull[hull.count - 2], hull.last!, point) <= 0 {
+                hull.removeLast()
+            }
+            hull.append(point)
+        }
+        return hull
+    }
+
     /// Returns a new array where the points are sorted in a counter-clockwise direction.
     /// - Note: This assumes inverted Y for CoreGraphics
     /// - Returns: An array of CGPoint sorted in clockwise order.
@@ -82,5 +110,11 @@ public extension Array where Element == CGPoint {
     /// - Returns: A Boolean value indicating whether the points are ordered clockwise.
     func isClockwise() -> Bool {
         return signedArea() <= 0
+    }
+
+    // Helper function to calculate the cross product of vectors OA and OB
+    // A positive cross product indicates a counter-clockwise turn, 0 indicates a collinear point, and negative indicates a clockwise turn
+    private func cross(_ O: CGPoint, _ A: CGPoint, _ B: CGPoint) -> CGFloat {
+        return (A.x - O.x) * (B.y - O.y) - (A.y - O.y) * (B.x - O.x)
     }
 }
