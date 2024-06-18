@@ -6,19 +6,8 @@
 //
 
 import CoreGraphics
-import SwiftUI
 
 extension CGRect {
-
-    /// A subscript that returns a `CGPoint` within the rectangle based on a `UnitPoint`.
-    /// - Parameter unitPoint: A `UnitPoint` representing a relative position within the rectangle.
-    /// - Returns: A `CGPoint` corresponding to the position within the rectangle.
-    @available(iOS 13.0, macOS 10.15, *)
-    subscript(_ unitPoint: UnitPoint) -> CGPoint {
-        return CGPoint(x: minX + unitPoint.x * width,
-                       y: minY + unitPoint.y * height)
-    }
-
     /// Initializes a `CGRect` with the given `x`, `y`, `width`, and `height` values.
     /// - Parameters:
     ///   - x: The x-coordinate of the origin of the rectangle.
@@ -73,51 +62,5 @@ extension CGRect {
     /// - Parameter delta: The amount to expand the edges of the rectangle.
     public func expand(by delta: CGFloat) -> CGRect {
         return inset(by: -delta)
-    }
-
-    // MARK: - Assignment Operators
-
-    /// Translates the given `lhs` `CGRect` by the given `rhs` `CGVector`.
-    static public func += (lhs: inout CGRect, rhs: CGVector) {
-        lhs = lhs + rhs
-    }
-
-    /// Translates the given `lhs` `CGRect` by the given `rhs` `CGVector`.
-    static public func -= (lhs: inout CGRect, rhs: CGVector) {
-        lhs = lhs - rhs
-    }
-
-    // MARK: - Translate
-
-    /// Translates the given `lhs` `CGRect` by the given `rhs` `CGPoint`.
-    static public func - (lhs: CGRect, rhs: CGPoint) -> CGRect {
-        return CGRect(x: lhs.origin.x - rhs.x, y: lhs.origin.y - rhs.y, width: lhs.width, height: lhs.height)
-    }
-
-    /// Translates the given `lhs` `CGRect` by the given `rhs` `CGPoint`.
-    static public func + (lhs: CGRect, rhs: CGPoint) -> CGRect {
-        return CGRect(x: lhs.origin.x + rhs.x, y: lhs.origin.y + rhs.y, width: lhs.width, height: lhs.height)
-    }
-
-    /// Translates the given `lhs` `CGRect` by the given `rhs` `CGVector`.
-    static public func - (lhs: CGRect, rhs: CGVector) -> CGRect {
-        return CGRect(x: lhs.origin.x - rhs.dx, y: lhs.origin.y - rhs.dy, width: lhs.width, height: lhs.height)
-    }
-
-    /// Translates the given `lhs` `CGRect` by the given `rhs` `CGVector`.
-    static public func + (lhs: CGRect, rhs: CGVector) -> CGRect {
-        return CGRect(x: lhs.origin.x + rhs.dx, y: lhs.origin.y + rhs.dy, width: lhs.width, height: lhs.height)
-    }
-
-    // MARK: - Expand
-
-    /// Expands the given `lhs` `CGRect` by the given `rhs` `CGSize`.
-    static public func - (lhs: CGRect, rhs: CGSize) -> CGRect {
-        return CGRect(x: lhs.origin.x, y: lhs.origin.y, width: lhs.width - rhs.width, height: lhs.height - rhs.height)
-    }
-
-    /// Expands the given `lhs` `CGRect` by the given `rhs` `CGSize`.
-    static public func + (lhs: CGRect, rhs: CGSize) -> CGRect {
-        return CGRect(x: lhs.origin.x, y: lhs.origin.y, width: lhs.width + rhs.width, height: lhs.height + rhs.height)
     }
 }

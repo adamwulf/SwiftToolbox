@@ -5,7 +5,6 @@
 //  Created by Adam Wulf on 5/8/22.
 //
 
-import Foundation
 import CoreGraphics
 
 extension CGSize {
@@ -44,39 +43,4 @@ extension CGSize {
     public var maxDim: CGFloat {
         return max(width, height)
     }
-
-    // MARK: - Scale
-
-    /// Scales the `CGSize` by the given `Int`
-    /// - Parameters:
-    ///   - lhs: The `CGSize` to scale
-    ///   - rhs: The `Int` to scale by
-    static public func * (lhs: CGSize, rhs: Int) -> CGSize {
-        return CGSize(width: lhs.width * CGFloat(rhs), height: lhs.height * CGFloat(rhs))
-    }
-
-    /// Scales the `CGSize` by the given `Int`
-    /// - Parameters:
-    ///   - lhs: The `CGSize` to scale
-    ///   - rhs: The `Int` to scale by
-    static public func / (lhs: CGSize, rhs: Int) -> CGSize {
-        return CGSize(width: lhs.width / CGFloat(rhs), height: lhs.height / CGFloat(rhs))
-    }
-
-    /// Scales the `CGSize` by the given `CGFloat`
-    /// - Parameters:
-    ///   - lhs: The `CGSize` to scale
-    ///   - rhs: The `CGFloat` to scale by
-    static public func * (lhs: CGSize, rhs: CGFloat) -> CGSize {
-        return CGSize(width: lhs.width * rhs, height: lhs.height * rhs)
-    }
-
-    /// Scales the `CGSize` by the given `CGFloat`
-    /// - Parameters:
-    ///   - lhs: The `CGSize` to scale
-    ///   - rhs: The `CGFloat` to scale by
-    static public func / (lhs: CGSize, rhs: CGFloat) -> CGSize {
-        return CGSize(width: lhs.width / rhs, height: lhs.height / rhs)
-    }
-
 }
