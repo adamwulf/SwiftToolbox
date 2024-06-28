@@ -435,6 +435,8 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(String.logfmt(dict2), "asdf.0=\"qwer thjfdg\"")
         let dict3 = ["asdf": ["fumble": "qwer thjfdg"]]
         XCTAssertEqual(String.logfmt(dict3), "asdf.fumble=\"qwer thjfdg\"")
+        let dict4 = ["asdf": ["fumble", "mumble"]]
+        XCTAssertEqual(String.logfmt(dict4), "asdf.0=fumble asdf.1=mumble")
 
         let memoryContext = ["memory":
                                 ["current": ["footprint": 128,
