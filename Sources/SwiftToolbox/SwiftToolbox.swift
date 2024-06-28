@@ -21,9 +21,9 @@ public struct SwiftToolbox {
     }
 
     // swiftlint:disable line_length
-    public static var logHandler: ((_ level: LogLevel, _ message: String, _ file: String, _ function: String, _ line: Int, _ context: [String: Any]) -> Void)?
-    static func log(level: LogLevel, message: String, file: String = #file, function: String = #function, line: Int = #line, context: [String: Any]) {
-        Self.logHandler?(level, message, file, function, line, context)
+    public static var logHandler: ((_ level: LogLevel, _ file: String, _ function: String, _ line: Int, _ context: [String: Any]) -> Void)?
+    static func log(level: LogLevel, file: String = #file, function: String = #function, line: Int = #line, context: [String: Any]) {
+        Self.logHandler?(level, file, function, line, context)
     }
     // swiftlint:enable line_length
 }
