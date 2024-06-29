@@ -45,6 +45,13 @@ private extension String {
             return logfmt(object.logfmtDescription, attribute: attribute)
         case let object as CustomStringConvertible:
             return logfmt(object.description, attribute: attribute)
+        case let object as OptionalProtocol:
+            switch object.isSome() {
+            case true:
+                return logfmt(object.unwrap(), attribute: attribute)
+            case false:
+                return logfmt("[none]", attribute: attribute)
+            }
         case let object as CustomDebugStringConvertible:
             return logfmt(object.debugDescription, attribute: attribute)
         default:
@@ -89,5 +96,26 @@ private extension String {
     /// - Returns: The wrapped string
     func wrapInQuotes() -> String {
         return "\"\(self)\""
+    }
+}
+
+protocol OptionalProtocol {
+    func isSome() -> Bool
+    func unwrap() -> Any
+}
+
+extension Optional: OptionalProtocol {
+    func isSome() -> Bool {
+        switch self {
+        case .none: return false
+        case .some: return true
+        }
+    }
+
+    func unwrap() -> Any {
+        switch self {
+        case .none: preconditionFailure("trying to unwrap nil")
+        case .some(let unwrapped): return unwrapped
+        }
     }
 }

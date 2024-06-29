@@ -398,21 +398,6 @@ final class SwiftToolboxTests: XCTestCase {
 
     @available(iOS 13.0, macOS 10.15, *)
     func testLogfmt() {
-        class Fumble: CustomDebugStringConvertible {
-            var debugDescription: String {
-                return "debugStr"
-            }
-        }
-        class Mumble: CustomStringConvertible {
-            var description: String {
-                return "customString"
-            }
-        }
-        class Bumble: CustomLogfmtStringConvertible {
-            var logfmtDescription: String {
-                return "grumblebumble"
-            }
-        }
         let str1 = "asdf"
         XCTAssertEqual(String.logfmt(str1), "asdf")
         let str2 = "asdf\"asdf\""
@@ -437,6 +422,14 @@ final class SwiftToolboxTests: XCTestCase {
         XCTAssertEqual(String.logfmt(dict3), "asdf.fumble=\"qwer thjfdg\"")
         let dict4 = ["asdf": ["fumble", "mumble"]]
         XCTAssertEqual(String.logfmt(dict4), "asdf.0=fumble asdf.1=mumble")
+        let optional1: Grumble? = Grumble()
+        let optional2: String? = nil
+        let dict5: [String: [Any?]] = ["asdf": [optional1, optional2]]
+        XCTAssertEqual(String.logfmt(dict5), "asdf.0=SwiftToolboxTests.Grumble asdf.1=[none]")
+        let optional3: String? = "grumble"
+        let optional4: String? = nil
+        let dict6: [String: [Any?]] = ["asdf": [optional3, optional4]]
+        XCTAssertEqual(String.logfmt(dict6), "asdf.0=grumble asdf.1=[none]")
 
         let memoryContext = ["memory":
                                 ["current": ["footprint": 128,
@@ -589,3 +582,20 @@ extension Object {
         set { self[dynamic: #function] = newValue }
     }
 }
+
+class Fumble: CustomDebugStringConvertible {
+    var debugDescription: String {
+        return "debugStr"
+    }
+}
+class Mumble: CustomStringConvertible {
+    var description: String {
+        return "customString"
+    }
+}
+class Bumble: CustomLogfmtStringConvertible {
+    var logfmtDescription: String {
+        return "grumblebumble"
+    }
+}
+class Grumble { }
