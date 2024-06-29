@@ -84,8 +84,7 @@ public struct Signpost: Signpostable {
             } else {
                 idContext = [:]
             }
-            SwiftToolbox.log(level: level, file: file, function: function, line: line, context: [
-                "subsystem": "signpost",
+            SwiftToolbox.log(level: level, message: "signpost", file: file, function: function, line: line, context: [
                 "name": name,
                 "status": "finished",
                 "duration": duration
@@ -112,8 +111,8 @@ public struct Signpost: Signpostable {
             }
             let level: SwiftToolbox.LogLevel = duration >= limit ? max(.warning, level ?? self.level) : (level ?? self.level)
             let signpostCtx: [String: Any] = ["name": name, "event": event, "status": "running", "duration": duration].merging(idContext)
-            SwiftToolbox.log(level: level, file: file, function: function, line: line, context: signpostCtx
-                .merging(context ?? [:]).merging(["subsystem": "signpost"]))
+            SwiftToolbox.log(level: level, message: "signpost", file: file, function: function, line: line, context: signpostCtx
+                .merging(context ?? [:]))
         }
     }
 }
@@ -141,8 +140,7 @@ final class OSSignpost: Signpostable {
     /// Finishes the signpost.
     func finish(context: [String: Any]? = nil, file: String, function: String, line: Int, level: SwiftToolbox.LogLevel? = nil) {
         guard !finished else {
-            SwiftToolbox.log(level: .warning, file: file, function: function, line: line, context: [
-                "subsystem": "signpost",
+            SwiftToolbox.log(level: .warning, message: "signpost", file: file, function: function, line: line, context: [
                 "reason": "signpost already finalized",
                 "name": name
             ])
@@ -162,8 +160,7 @@ final class OSSignpost: Signpostable {
               line: Int,
               level: SwiftToolbox.LogLevel? = nil) {
         guard !finished else {
-            SwiftToolbox.log(level: .warning, file: file, function: function, line: line, context: [
-                "subsystem": "signpost",
+            SwiftToolbox.log(level: .warning, message: "signpost", file: file, function: function, line: line, context: [
                 "reason": "signpost already finalized",
                 "name": name
             ])
