@@ -1,0 +1,16 @@
+--91959998-92F6-4D5E-B1EB-559175C0649A
+Content-Disposition: form-data; name="uuid"
+
+91959998-92F6-4D5E-B1EB-559175C0649A
+--91959998-92F6-4D5E-B1EB-559175C0649A
+Content-Disposition: form-data; name="title"
+
+
+--91959998-92F6-4D5E-B1EB-559175C0649A
+Content-Disposition: form-data; name="json_data"
+
+{
+  "url" : "https:\/\/duckduckgo.com\/"
+}
+
+--91959998-92F6-4D5E-B1EB-559175C0649A--
