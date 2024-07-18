@@ -89,4 +89,37 @@ final class FormDataTests: XCTestCase {
             XCTFail("Failed to parse multipart form data")
         }
     }
+
+    // Test that a form value that contains form-data formatted content is still able to be parsed.
+    func testParseMultipartFormDataWithNestedFormData() {
+        let nestedFormData = """
+            --nestedBoundary
+            Content-Disposition: form-data; name="nestedField"
+
+            nestedValue
+            --nestedBoundary--
+            """
+
+        let fileContent = """
+            --4250D4D6-2C1D-4602-A004-64D839E45169
+            Content-Disposition: form-data; name="nested_form_data"
+            Content-Type: multipart/form-data; boundary=nestedBoundary
+
+            \(nestedFormData)
+            --4250D4D6-2C1D-4602-A004-64D839E45169--
+            """
+
+        if let result = FormData.parseMultipartFormData(from: fileContent) {
+            XCTAssertEqual(result.boundary, "4250D4D6-2C1D-4602-A004-64D839E45169")
+            XCTAssertEqual(result.formData.count, 1)
+
+            let nestedField = result.formData[0]
+            XCTAssertEqual(nestedField.name, "nested_form_data")
+            XCTAssertNil(nestedField.filename)
+            XCTAssertEqual(nestedField.contentType, "multipart/form-data; boundary=nestedBoundary")
+            XCTAssertEqual(String(data: nestedField.value, encoding: .utf8), nestedFormData + "\n")
+        } else {
+            XCTFail("Failed to parse multipart form data")
+        }
+    }
 }

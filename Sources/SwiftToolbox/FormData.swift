@@ -13,6 +13,11 @@ public struct FormData {
     public let contentType: String?
     public let value: Data
 
+    enum ParserState {
+        case readingHeaders
+        case readingValue
+    }
+
     public static func parseMultipartFormData(from fileContent: String) -> (boundary: String, formData: [FormData])? {
         let lines = fileContent.components(separatedBy: .newlines)
         guard let boundaryLine = lines.first, boundaryLine.hasPrefix("--") else {
@@ -25,7 +30,7 @@ public struct FormData {
         var currentFilename: String?
         var currentContentType: String?
         var currentValue: Data?
-        var isReadingValue = false
+        var state: ParserState = .readingHeaders
 
         for line in lines.dropFirst() {
             if line.hasPrefix("--\(boundary)") {
@@ -36,26 +41,26 @@ public struct FormData {
                 currentFilename = nil
                 currentContentType = nil
                 currentValue = nil
-                isReadingValue = false
-            } else if line.hasPrefix("Content-Disposition: form-data;") {
-                let components = line.components(separatedBy: "; ")
-                for component in components {
-                    if component.hasPrefix("name=") {
-                        currentName = component.replacingOccurrences(of: "name=", with: "")
-                            .trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-                    } else if component.hasPrefix("filename=") {
-                        currentFilename = component.replacingOccurrences(of: "filename=", with: "")
-                            .trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+                state = .readingHeaders
+            } else if state == .readingHeaders {
+                if line.hasPrefix("Content-Disposition: form-data;") {
+                    let components = line.components(separatedBy: "; ")
+                    for component in components {
+                        if component.hasPrefix("name=") {
+                            currentName = component.replacingOccurrences(of: "name=", with: "")
+                                .trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+                        } else if component.hasPrefix("filename=") {
+                            currentFilename = component.replacingOccurrences(of: "filename=", with: "")
+                                .trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+                        }
                     }
-                }
-            } else if line.hasPrefix("Content-Type:") {
-                currentContentType = line.replacingOccurrences(of: "Content-Type: ", with: "").trimmingCharacters(in: .whitespaces)
-            } else if line.isEmpty {
-                isReadingValue = true
-            } else if isReadingValue {
-                if currentValue == nil {
+                } else if line.hasPrefix("Content-Type:") {
+                    currentContentType = line.replacingOccurrences(of: "Content-Type: ", with: "").trimmingCharacters(in: .whitespaces)
+                } else if line.isEmpty {
+                    state = .readingValue
                     currentValue = Data()
                 }
+            } else if state == .readingValue {
                 if let data = line.data(using: .utf8) {
                     currentValue?.append(data)
                     currentValue?.append(Data("\n".utf8)) // Add newline character back
