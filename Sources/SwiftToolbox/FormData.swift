@@ -15,57 +15,75 @@ public struct FormData {
 
     enum ParserState {
         case readingHeaders
+        case startReadingValue
         case readingValue
     }
 
-    public static func parseMultipartFormData(from fileContent: String) -> (boundary: String, formData: [FormData])? {
-        let lines = fileContent.components(separatedBy: .newlines)
-        guard let boundaryLine = lines.first, boundaryLine.hasPrefix("--") else {
+    public static func parseMultipartFormData(from fileContent: Data) -> (boundary: String, formData: [FormData])? {
+        guard
+            let boundaryLine = fileContent.split(separator: UInt8(ascii: "\n")).first,
+            let boundaryString = String(data: Data(boundaryLine), encoding: .utf8),
+            boundaryString.hasPrefix("--")
+        else {
             return nil
         }
 
-        let boundary = String(boundaryLine.dropFirst(2))
+        let boundary = String(boundaryString.dropFirst(2))
         var formDataArray: [FormData] = []
         var currentName: String?
         var currentFilename: String?
         var currentContentType: String?
-        var currentValue: Data?
+        var currentValue = Data()
         var state: ParserState = .readingHeaders
 
+        let lines = fileContent.split(separator: UInt8(ascii: "\n"), omittingEmptySubsequences: false)
         for line in lines.dropFirst() {
-            if line.hasPrefix("--\(boundary)") {
-                if let name = currentName, let value = currentValue {
-                    formDataArray.append(FormData(name: name, filename: currentFilename, contentType: currentContentType, value: value))
+            if let lineString = String(data: Data(line), encoding: .utf8), lineString.hasPrefix("--\(boundary)") {
+                if let name = currentName {
+                    formDataArray.append(FormData(
+                        name: name,
+                        filename: currentFilename,
+                        contentType: currentContentType,
+                        value: currentValue))
                 }
                 currentName = nil
                 currentFilename = nil
                 currentContentType = nil
-                currentValue = nil
+                currentValue = Data()
                 state = .readingHeaders
             } else if state == .readingHeaders {
-                if line.hasPrefix("Content-Disposition: form-data;") {
-                    let components = line.components(separatedBy: "; ")
-                    for component in components {
-                        if component.hasPrefix("name=") {
-                            currentName = component.replacingOccurrences(of: "name=", with: "")
-                                .trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-                        } else if component.hasPrefix("filename=") {
-                            currentFilename = component.replacingOccurrences(of: "filename=", with: "")
-                                .trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+                if let lineString = String(data: Data(line), encoding: .utf8) {
+                    if lineString.hasPrefix("Content-Disposition: form-data;") {
+                        let components = lineString.components(separatedBy: "; ")
+                        for component in components {
+                            if component.hasPrefix("name=") {
+                                currentName = component.replacingOccurrences(of: "name=", with: "")
+                                    .trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+                            } else if component.hasPrefix("filename=") {
+                                currentFilename = component.replacingOccurrences(of: "filename=", with: "")
+                                    .trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+                            }
                         }
+                    } else if lineString.hasPrefix("Content-Type:") {
+                        currentContentType = lineString.replacingOccurrences(of: "Content-Type: ", with: "")
+                            .trimmingCharacters(in: .whitespaces)
+                    } else if lineString.isEmpty {
+                        state = .startReadingValue
                     }
-                } else if line.hasPrefix("Content-Type:") {
-                    currentContentType = line.replacingOccurrences(of: "Content-Type: ", with: "").trimmingCharacters(in: .whitespaces)
-                } else if line.isEmpty {
-                    state = .readingValue
-                    currentValue = Data()
                 }
+            } else if state == .startReadingValue {
+                currentValue.append(line)
+                state = .readingValue
             } else if state == .readingValue {
-                if let data = line.data(using: .utf8) {
-                    currentValue?.append(data)
-                    currentValue?.append(Data("\n".utf8)) // Add newline character back
-                }
+                // Add newline character back if we have been parsing the value data
+                currentValue.append(UInt8(ascii: "\n"))
+                currentValue.append(line)
             }
+        }
+
+        // Add the last form data if any
+        if let name = currentName {
+            formDataArray.append(FormData(name: name, filename: currentFilename, contentType: currentContentType, value: currentValue))
         }
 
         // Attempt to decode base64 if content type suggests binary data
