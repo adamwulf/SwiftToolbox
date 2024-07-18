@@ -28,7 +28,13 @@ public struct FormData {
             return nil
         }
 
-        let boundary = String(boundaryString.dropFirst(2))
+        var trimcarriageReturn = false
+        var boundary = String(boundaryString.dropFirst(2))
+        if boundary.hasSuffix("\r") {
+            // line endings are \r\n
+            boundary = String(boundary.dropLast(1))
+            trimcarriageReturn = true
+        }
         var formDataArray: [FormData] = []
         var currentName: String?
         var currentFilename: String?
@@ -38,7 +44,14 @@ public struct FormData {
 
         let lines = fileContent.split(separator: UInt8(ascii: "\n"), omittingEmptySubsequences: false)
         for line in lines.dropFirst() {
-            if let lineString = String(data: Data(line), encoding: .utf8), lineString.hasPrefix("--\(boundary)") {
+            if var lineString = String(data: Data(line), encoding: .utf8), lineString.hasPrefix("--\(boundary)") {
+                if trimcarriageReturn, lineString.hasSuffix("\r") {
+                    lineString = String(lineString.dropLast())
+                }
+                if trimcarriageReturn, currentValue.last == UInt8(ascii: "\r") {
+                    currentValue = currentValue.dropLast(1)
+                }
+
                 if let name = currentName {
                     formDataArray.append(FormData(
                         name: name,
@@ -52,7 +65,10 @@ public struct FormData {
                 currentValue = Data()
                 state = .readingHeaders
             } else if state == .readingHeaders {
-                if let lineString = String(data: Data(line), encoding: .utf8) {
+                if var lineString = String(data: Data(line), encoding: .utf8) {
+                    if trimcarriageReturn, lineString.hasSuffix("\r") {
+                        lineString = String(lineString.dropLast())
+                    }
                     if lineString.hasPrefix("Content-Disposition: form-data;") {
                         let components = lineString.components(separatedBy: "; ")
                         for component in components {
@@ -83,6 +99,9 @@ public struct FormData {
 
         // Add the last form data if any
         if let name = currentName {
+            if trimcarriageReturn, currentValue.last == UInt8(ascii: "\r") {
+                currentValue = currentValue.dropLast(1)
+            }
             formDataArray.append(FormData(name: name, filename: currentFilename, contentType: currentContentType, value: currentValue))
         }
 

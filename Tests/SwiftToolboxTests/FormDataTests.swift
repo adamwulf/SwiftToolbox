@@ -3,7 +3,7 @@ import XCTest
 
 final class FormDataTests: XCTestCase {
 
-    func testParseMultipartFormDataWithTextFields() {
+    func testTextFields() {
         let fileContent = """
         --4250D4D6-2C1D-4602-A004-64D839E45169
         Content-Disposition: form-data; name="uuid"
@@ -34,7 +34,7 @@ final class FormDataTests: XCTestCase {
         }
     }
 
-    func testParseMultipartFormDataWithBinaryData() {
+    func testBinaryData() {
         guard let fileURL = Bundle.module.url(forResource: "example", withExtension: "png"),
               let fileData = try? Data(contentsOf: fileURL) else {
             XCTFail("Failed to load example.png from test bundle")
@@ -73,7 +73,7 @@ final class FormDataTests: XCTestCase {
         }
     }
 
-    func testParseMultipartFormDataWithRawBinaryData() {
+    func testRawBinaryData() {
         guard let fileURL = Bundle.module.url(forResource: "example", withExtension: "png"),
               let fileData = try? Data(contentsOf: fileURL) else {
             XCTFail("Failed to load example.png from test bundle")
@@ -111,7 +111,7 @@ final class FormDataTests: XCTestCase {
         }
     }
 
-    func testParseMultipartFormDataWithJsonData() {
+    func testJsonData() {
         let fileContent = """
         --91959998-92F6-4D5E-B1EB-559175C0649A
         Content-Disposition: form-data; name="json_data"
@@ -138,7 +138,7 @@ final class FormDataTests: XCTestCase {
     }
 
     // Test that a form value that contains form-data formatted content is still able to be parsed.
-    func testParseMultipartFormDataWithNestedFormData() {
+    func testNestedFormData() {
         let nestedFormData = """
             --nestedBoundary
             Content-Disposition: form-data; name="nestedField"
@@ -169,4 +169,74 @@ final class FormDataTests: XCTestCase {
             XCTFail("Failed to parse multipart form data")
         }
     }
+
+    func testCarraigeReturns() {
+        guard
+            let fileURL = Bundle.module.url(forResource: "4250D4D6-2C1D-4602-A004-64D839E45169", withExtension: "request_data"),
+            let fileData = try? Data(contentsOf: fileURL)
+        else {
+            XCTFail("Failed to load example.png from test bundle")
+            return
+        }
+
+        if let result = FormData.parseMultipartFormData(from: fileData) {
+            XCTAssertEqual(result.boundary, "4250D4D6-2C1D-4602-A004-64D839E45169")
+            XCTAssertEqual(result.formData.count, 3)
+
+            let uuidField = result.formData[0]
+            XCTAssertEqual(uuidField.name, "uuid")
+            XCTAssertNil(uuidField.filename)
+            XCTAssertEqual(String(data: uuidField.value, encoding: .utf8), "4250D4D6-2C1D-4602-A004-64D839E45169")
+
+            let titleField = result.formData[1]
+            XCTAssertEqual(titleField.name, "title")
+            XCTAssertNil(titleField.filename)
+            XCTAssertEqual(String(data: titleField.value, encoding: .utf8), "DuckDuckGo — Privacy, simplified.")
+
+            let binaryField = result.formData[2]
+            XCTAssertEqual(binaryField.name, "binary_data")
+            XCTAssertEqual(binaryField.filename, "DuckDuckGo — Privacy, simplified..pdf")
+            XCTAssertEqual(binaryField.value.count, 2462905)
+
+            try! binaryField.value.write(to: URL(fileURLWithPath: "/Users/adamwulf/Downloads/fumblemumble.pdf"))
+
+        } else {
+            XCTFail("Failed to parse multipart form data")
+        }
+    }
+
+    func testCarraigeReturns2() {
+        guard
+            let fileURL = Bundle.module.url(forResource: "91959998-92F6-4D5E-B1EB-559175C0649A", withExtension: "request_data"),
+            let fileData = try? Data(contentsOf: fileURL)
+        else {
+            XCTFail("Failed to load example.png from test bundle")
+            return
+        }
+
+        if let result = FormData.parseMultipartFormData(from: fileData) {
+            XCTAssertEqual(result.boundary, "91959998-92F6-4D5E-B1EB-559175C0649A")
+            XCTAssertEqual(result.formData.count, 3)
+
+            let uuidField = result.formData[0]
+            XCTAssertEqual(uuidField.name, "uuid")
+            XCTAssertNil(uuidField.filename)
+            XCTAssertEqual(String(data: uuidField.value, encoding: .utf8), "91959998-92F6-4D5E-B1EB-559175C0649A")
+
+            let titleField = result.formData[1]
+            XCTAssertEqual(titleField.name, "title")
+            XCTAssertNil(titleField.filename)
+            XCTAssertEqual(String(data: titleField.value, encoding: .utf8), "")
+
+            let jsonField = result.formData[2]
+            XCTAssertEqual(jsonField.name, "json_data")
+            XCTAssertNil(jsonField.filename)
+            XCTAssertNil(jsonField.contentType)
+            // This looks strange with the extra \r\n at the end, but this is how the data is formatted in the file and is the correct parse
+            XCTAssertEqual(String(data: jsonField.value, encoding: .utf8), "{\n  \"url\" : \"https:\\/\\/duckduckgo.com\\/\"\n}\r\n")
+        } else {
+            XCTFail("Failed to parse multipart form data")
+        }
+    }
+
 }
