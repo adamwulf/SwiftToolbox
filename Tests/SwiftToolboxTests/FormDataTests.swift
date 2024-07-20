@@ -66,6 +66,29 @@ final class FormDataTests: XCTestCase {
         XCTAssertEqual(lines, processed)
     }
 
+    func testRequireCarraigeReturn4() {
+        let fileContent = """
+        line1\r
+        line2\r
+        \r
+        line4\r
+        line5\r
+        line6
+        """
+
+        let processed = [
+            "line1",
+            "line2",
+            "",
+            "line4",
+            "line5",
+            "line6",
+        ]
+
+        let lines = FormData.processLines(in: Data(fileContent.utf8)).map({ String(data: $0, encoding: .utf8)! })
+        XCTAssertEqual(lines, processed)
+    }
+
     func testTextFields() {
         let fileContent = """
         --4250D4D6-2C1D-4602-A004-64D839E45169\r
@@ -148,17 +171,17 @@ final class FormDataTests: XCTestCase {
         var fileContent = Data()
         let boundary = "--4250D4D6-2C1D-4602-A004-64D839E45169"
         let headers = """
-        Content-Disposition: form-data; name="binary_data"; filename="example.png"
-        Content-Type: image/png
+        Content-Disposition: form-data; name="binary_data"; filename="example.png"\r
+        Content-Type: image/png\r
 
         """.data(using: .utf8)!
 
         fileContent.append(Data(boundary.utf8))
-        fileContent.append(Data("\n".utf8))
+        fileContent.append(Data("\r\n".utf8))
         fileContent.append(headers)
-        fileContent.append(Data("\n".utf8))
+        fileContent.append(Data("\r\n".utf8))
         fileContent.append(fileData)
-        fileContent.append(Data("\n".utf8))
+        fileContent.append(Data("\r\n".utf8))
         fileContent.append(Data(boundary.utf8))
         fileContent.append(Data("--".utf8))
 
@@ -179,13 +202,13 @@ final class FormDataTests: XCTestCase {
 
     func testJsonData() {
         let fileContent = """
-        --91959998-92F6-4D5E-B1EB-559175C0649A
-        Content-Disposition: form-data; name="json_data"
-        Content-Type: application/json
-
+        --91959998-92F6-4D5E-B1EB-559175C0649A\r
+        Content-Disposition: form-data; name="json_data"\r
+        Content-Type: application/json\r
+        \r
         {
           "url" : "https:\\/\\/duckduckgo.com\\/"
-        }
+        }\r
         --91959998-92F6-4D5E-B1EB-559175C0649A--
         """
 
@@ -207,19 +230,19 @@ final class FormDataTests: XCTestCase {
     // Test that a form value that contains form-data formatted content is still able to be parsed.
     func testNestedFormData() {
         let nestedFormData = """
-            --nestedBoundary
-            Content-Disposition: form-data; name="nestedField"
-
-            nestedValue
+            --nestedBoundary\r
+            Content-Disposition: form-data; name="nestedField"\r
+            \r
+            nestedValue\r
             --nestedBoundary--
             """
 
         let fileContent = """
-            --4250D4D6-2C1D-4602-A004-64D839E45169
-            Content-Disposition: form-data; name="nested_form_data"
-            Content-Type: multipart/form-data; boundary=nestedBoundary
-
-            \(nestedFormData)
+            --4250D4D6-2C1D-4602-A004-64D839E45169\r
+            Content-Disposition: form-data; name="nested_form_data"\r
+            Content-Type: multipart/form-data; boundary=nestedBoundary\r
+            \r
+            \(nestedFormData)\r
             --4250D4D6-2C1D-4602-A004-64D839E45169--
             """
 
