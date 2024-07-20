@@ -161,6 +161,37 @@ final class FormDataTests: XCTestCase {
         }
     }
 
+    func testBinaryData2() {
+        guard let fileURL = Bundle.module.url(forResource: "F23A9777-B637-42E1-89AA-3ABDDD5FF88A", withExtension: "request_data"),
+              let fileData = try? Data(contentsOf: fileURL) else {
+            XCTFail("Failed to load example.png from test bundle")
+            return
+        }
+
+        if let result = FormData.parseMultipartFormData(from: fileData) {
+            XCTAssertEqual(result.boundary, "F23A9777-B637-42E1-89AA-3ABDDD5FF88A")
+            XCTAssertEqual(result.formData.count, 3)
+            guard result.formData.count == 3 else { return }
+
+            let uuidField = result.formData[0]
+            XCTAssertEqual(uuidField.name, "uuid")
+            XCTAssertNil(uuidField.filename)
+            XCTAssertEqual(String(data: uuidField.value, encoding: .utf8), "F23A9777-B637-42E1-89AA-3ABDDD5FF88A")
+
+            let titleField = result.formData[1]
+            XCTAssertEqual(titleField.name, "title")
+            XCTAssertNil(titleField.filename)
+            XCTAssertEqual(String(data: titleField.value, encoding: .utf8), "")
+
+            let jsonField = result.formData[2]
+            XCTAssertEqual(jsonField.name, "json_data")
+            XCTAssertNil(jsonField.filename)
+            XCTAssertEqual(String(data: jsonField.value, encoding: .utf8), "{\n  \"text\" : \"Test\"\n}")
+        } else {
+            XCTFail("Failed to parse multipart form data")
+        }
+    }
+
     func testRawBinaryData() {
         guard let fileURL = Bundle.module.url(forResource: "example", withExtension: "png"),
               let fileData = try? Data(contentsOf: fileURL) else {
