@@ -104,8 +104,10 @@ final class FormDataTests: XCTestCase {
 
         if let result = FormData.parseMultipartFormData(from: Data(fileContent.utf8)) {
             XCTAssertEqual(result.boundary, "4250D4D6-2C1D-4602-A004-64D839E45169")
-            XCTAssertEqual(result.formData.count, 2)
-            guard result.formData.count == 2 else { return }
+            guard result.formData.count == 2 else {
+                XCTFail()
+                return
+            }
 
             let uuidField = result.formData[0]
             XCTAssertEqual(uuidField.name, "uuid")
@@ -143,8 +145,10 @@ final class FormDataTests: XCTestCase {
 
         if let result = FormData.parseMultipartFormData(from: Data(fileContent.utf8)) {
             XCTAssertEqual(result.boundary, "4250D4D6-2C1D-4602-A004-64D839E45169")
-            XCTAssertEqual(result.formData.count, 2)
-            guard result.formData.count == 2 else { return }
+            guard result.formData.count == 2 else {
+                XCTFail()
+                return
+            }
 
             let titleField = result.formData[0]
             XCTAssertEqual(titleField.name, "title")
@@ -170,8 +174,10 @@ final class FormDataTests: XCTestCase {
 
         if let result = FormData.parseMultipartFormData(from: fileData) {
             XCTAssertEqual(result.boundary, "F23A9777-B637-42E1-89AA-3ABDDD5FF88A")
-            XCTAssertEqual(result.formData.count, 3)
-            guard result.formData.count == 3 else { return }
+            guard result.formData.count == 3 else {
+                XCTFail()
+                return
+            }
 
             let uuidField = result.formData[0]
             XCTAssertEqual(uuidField.name, "uuid")
@@ -218,8 +224,10 @@ final class FormDataTests: XCTestCase {
 
         if let result = FormData.parseMultipartFormData(from: fileContent) {
             XCTAssertEqual(result.boundary, "4250D4D6-2C1D-4602-A004-64D839E45169")
-            XCTAssertEqual(result.formData.count, 1)
-            guard result.formData.count == 1 else { return }
+            guard result.formData.count == 1 else {
+                XCTFail()
+                return
+            }
 
             let binaryField = result.formData[0]
             XCTAssertEqual(binaryField.name, "binary_data")
@@ -245,8 +253,10 @@ final class FormDataTests: XCTestCase {
 
         if let result = FormData.parseMultipartFormData(from: Data(fileContent.utf8)) {
             XCTAssertEqual(result.boundary, "91959998-92F6-4D5E-B1EB-559175C0649A")
-            XCTAssertEqual(result.formData.count, 1)
-            guard result.formData.count == 1 else { return }
+            guard result.formData.count == 1 else {
+                XCTFail()
+                return
+            }
 
             let jsonField = result.formData[0]
             XCTAssertEqual(jsonField.name, "json_data")
@@ -279,8 +289,10 @@ final class FormDataTests: XCTestCase {
 
         if let result = FormData.parseMultipartFormData(from: Data(fileContent.utf8)) {
             XCTAssertEqual(result.boundary, "4250D4D6-2C1D-4602-A004-64D839E45169")
-            XCTAssertEqual(result.formData.count, 1)
-            guard result.formData.count == 1 else { return }
+            guard result.formData.count == 1 else {
+                XCTFail()
+                return
+            }
 
             let nestedField = result.formData[0]
             XCTAssertEqual(nestedField.name, "nested_form_data")
@@ -303,8 +315,10 @@ final class FormDataTests: XCTestCase {
 
         if let result = FormData.parseMultipartFormData(from: fileData) {
             XCTAssertEqual(result.boundary, "4250D4D6-2C1D-4602-A004-64D839E45169")
-            XCTAssertEqual(result.formData.count, 3)
-            guard result.formData.count == 3 else { return }
+            guard result.formData.count == 3 else {
+                XCTFail()
+                return
+            }
 
             let uuidField = result.formData[0]
             XCTAssertEqual(uuidField.name, "uuid")
@@ -336,8 +350,10 @@ final class FormDataTests: XCTestCase {
 
         if let result = FormData.parseMultipartFormData(from: fileData) {
             XCTAssertEqual(result.boundary, "91959998-92F6-4D5E-B1EB-559175C0649A")
-            XCTAssertEqual(result.formData.count, 3)
-            guard result.formData.count == 3 else { return }
+            guard result.formData.count == 3 else {
+                XCTFail()
+                return
+            }
 
             let uuidField = result.formData[0]
             XCTAssertEqual(uuidField.name, "uuid")
@@ -371,8 +387,10 @@ final class FormDataTests: XCTestCase {
 
         if let result = FormData.parseMultipartFormData(from: fileData) {
             XCTAssertEqual(result.boundary, "6C3CBA59-4B5F-4ADF-BEC7-080210848D1B")
-            XCTAssertEqual(result.formData.count, 3)
-            guard result.formData.count == 3 else { return }
+            guard result.formData.count == 3 else {
+                XCTFail()
+                return
+            }
 
             let uuidField = result.formData[0]
             XCTAssertEqual(uuidField.name, "uuid")
@@ -402,8 +420,10 @@ final class FormDataTests: XCTestCase {
 
         if let result = FormData.parseMultipartFormData(from: fileData, maxValueSize: .megabyte(1)) {
             XCTAssertEqual(result.boundary, "F23A9777-B637-42E1-89AA-3ABDDD5FF88A")
-            XCTAssertEqual(result.formData.count, 3)
-            guard result.formData.count == 3 else { return }
+            guard result.formData.count == 3 else {
+                XCTFail()
+                return
+            }
 
             let uuidField = result.formData[0]
             XCTAssertEqual(uuidField.name, "uuid")
@@ -433,8 +453,10 @@ final class FormDataTests: XCTestCase {
 
         if let result = FormData.parseMultipartFormData(from: fileData, maxValueSize: .byte(30)) {
             XCTAssertEqual(result.boundary, "F23A9777-B637-42E1-89AA-3ABDDD5FF88A")
-            XCTAssertEqual(result.formData.count, 3)
-            guard result.formData.count == 3 else { return }
+            guard result.formData.count == 3 else {
+                XCTFail()
+                return
+            }
 
             let uuidField = result.formData[0]
             XCTAssertEqual(uuidField.name, "uuid")
@@ -464,8 +486,10 @@ final class FormDataTests: XCTestCase {
 
         if let result = FormData.parseMultipartFormData(from: fileData, maxValueSize: .zero) {
             XCTAssertEqual(result.boundary, "F23A9777-B637-42E1-89AA-3ABDDD5FF88A")
-            XCTAssertEqual(result.formData.count, 3)
-            guard result.formData.count == 3 else { return }
+            guard result.formData.count == 3 else {
+                XCTFail()
+                return
+            }
 
             let uuidField = result.formData[0]
             XCTAssertEqual(uuidField.name, "uuid")
@@ -495,8 +519,10 @@ final class FormDataTests: XCTestCase {
 
         if let result = FormData.parseMultipartFormData(from: fileData, maxValueSize: .megabyte(1)) {
             XCTAssertEqual(result.boundary, "6C3CBA59-4B5F-4ADF-BEC7-080210848D1B")
-            XCTAssertEqual(result.formData.count, 3)
-            guard result.formData.count == 3 else { return }
+            guard result.formData.count == 3 else {
+                XCTFail()
+                return
+            }
 
             let uuidField = result.formData[0]
             XCTAssertEqual(uuidField.name, "uuid")
