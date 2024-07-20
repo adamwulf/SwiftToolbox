@@ -7,6 +7,7 @@
 
 import Foundation
 
+@available(macOS 13.0, *)
 public struct FormData {
     public let name: String
     public let filename: String?
@@ -19,22 +20,39 @@ public struct FormData {
         case readingValue
     }
 
+    static func processLines(in data: Data) -> [Data.SubSequence] {
+        let lines = data.split(separator: UInt8(ascii: "\n"), omittingEmptySubsequences: false)
+        var ret: [Data.SubSequence] = []
+        let carriageReturn = UInt8(ascii: "\r")
+        var startIndex: Data.Index?
+        for line in lines {
+            let indexBefore = line.index(before: line.endIndex)
+            if indexBefore >= line.startIndex, line[indexBefore] == carriageReturn {
+                let start = startIndex ?? line.startIndex
+                ret.append(data[start..<indexBefore])
+                startIndex = nil
+            } else if startIndex == nil {
+                startIndex = line.startIndex
+            }
+        }
+        if let startIndex = startIndex {
+            ret.append(data[startIndex...])
+        }
+        return ret
+    }
+
     public static func parseMultipartFormData(from fileContent: Data) -> (boundary: String, formData: [FormData])? {
+        let lines = processLines(in: fileContent)
+
         guard
-            let boundaryLine = fileContent.split(separator: UInt8(ascii: "\n")).first,
+            let boundaryLine = lines.first,
             let boundaryString = String(data: Data(boundaryLine), encoding: .utf8),
             boundaryString.hasPrefix("--")
         else {
             return nil
         }
 
-        var trimcarriageReturn = false
-        var boundary = String(boundaryString.dropFirst(2))
-        if boundary.hasSuffix("\r") {
-            // line endings are \r\n
-            boundary = String(boundary.dropLast(1))
-            trimcarriageReturn = true
-        }
+        let boundary = String(boundaryString.dropFirst(2))
         var formDataArray: [FormData] = []
         var currentName: String?
         var currentFilename: String?
@@ -42,16 +60,8 @@ public struct FormData {
         var currentValue = Data()
         var state: ParserState = .readingHeaders
 
-        let lines = fileContent.split(separator: UInt8(ascii: "\n"), omittingEmptySubsequences: false)
         for line in lines.dropFirst() {
-            if var lineString = String(data: Data(line), encoding: .utf8), lineString.hasPrefix("--\(boundary)") {
-                if trimcarriageReturn, lineString.hasSuffix("\r") {
-                    lineString = String(lineString.dropLast())
-                }
-                if trimcarriageReturn, currentValue.last == UInt8(ascii: "\r") {
-                    currentValue = currentValue.dropLast(1)
-                }
-
+            if let lineString = String(data: Data(line), encoding: .utf8), lineString.hasPrefix("--\(boundary)") {
                 if let name = currentName {
                     formDataArray.append(FormData(
                         name: name,
@@ -65,10 +75,7 @@ public struct FormData {
                 currentValue = Data()
                 state = .readingHeaders
             } else if state == .readingHeaders {
-                if var lineString = String(data: Data(line), encoding: .utf8) {
-                    if trimcarriageReturn, lineString.hasSuffix("\r") {
-                        lineString = String(lineString.dropLast())
-                    }
+                if let lineString = String(data: Data(line), encoding: .utf8) {
                     if lineString.hasPrefix("Content-Disposition: form-data;") {
                         let components = lineString.components(separatedBy: "; ")
                         for component in components {
@@ -91,7 +98,8 @@ public struct FormData {
                 currentValue.append(line)
                 state = .readingValue
             } else if state == .readingValue {
-                // Add newline character back if we have been parsing the value data
+                // Add line ending characters back if we have been parsing the value data
+                currentValue.append(UInt8(ascii: "\r"))
                 currentValue.append(UInt8(ascii: "\n"))
                 currentValue.append(line)
             }
@@ -99,9 +107,6 @@ public struct FormData {
 
         // Add the last form data if any
         if let name = currentName {
-            if trimcarriageReturn, currentValue.last == UInt8(ascii: "\r") {
-                currentValue = currentValue.dropLast(1)
-            }
             formDataArray.append(FormData(name: name, filename: currentFilename, contentType: currentContentType, value: currentValue))
         }
 
