@@ -15,6 +15,7 @@ public enum ByteSize: RawRepresentable, AdditiveArithmetic, Comparable, CustomSt
     case kilobyte(_ num: Int = 1)
     case megabyte(_ num: Int = 1)
     case gigabyte(_ num: Int = 1)
+    case max
 
     /// Initializes a `ByteSize` with the input number of bytes
     /// - parameter rawValue: The number of bytes as a `UInt64`
@@ -119,6 +120,8 @@ public enum ByteSize: RawRepresentable, AdditiveArithmetic, Comparable, CustomSt
             return num * 1024 * 1024
         case .gigabyte(let num):
             return num * 1024 * 1024 * 1024
+        case .max:
+            return .max
         }
     }
 
@@ -203,6 +206,8 @@ public enum ByteSize: RawRepresentable, AdditiveArithmetic, Comparable, CustomSt
             return "\(num)MB"
         case .gigabyte(let num):
             return "\(num)GB"
+        case .max:
+            return "\(Int.max)B"
         }
     }
 }
