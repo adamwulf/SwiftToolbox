@@ -543,4 +543,37 @@ final class FormDataTests: XCTestCase {
         }
     }
 
+    func testMaxBinarySize5() {
+        guard let fileURL = Bundle.module.url(forResource: "6C3CBA59-4B5F-4ADF-BEC7-080210848D1B", withExtension: "request_data"),
+              let fileData = try? Data(contentsOf: fileURL) else {
+            XCTFail("Failed to load example.png from test bundle")
+            return
+        }
+
+        if let result = FormData.parseMultipartFormData(from: fileData, maxValueSize: .megabyte(3)) {
+            XCTAssertEqual(result.boundary, "6C3CBA59-4B5F-4ADF-BEC7-080210848D1B")
+            guard result.formData.count == 3 else {
+                XCTFail()
+                return
+            }
+
+            let uuidField = result.formData[0]
+            XCTAssertEqual(uuidField.name, "uuid")
+            XCTAssertNil(uuidField.filename)
+            XCTAssertEqual(String(data: uuidField.value, encoding: .utf8), "6C3CBA59-4B5F-4ADF-BEC7-080210848D1B")
+
+            let titleField = result.formData[1]
+            XCTAssertEqual(titleField.name, "title")
+            XCTAssertNil(titleField.filename)
+            XCTAssertEqual(String(data: titleField.value, encoding: .utf8), "DuckDuckGo — Privacy, simplified.")
+
+            let binaryField = result.formData[2]
+            XCTAssertEqual(binaryField.name, "binary_data")
+            XCTAssertEqual(binaryField.filename, "DuckDuckGo — Privacy, simplified..pdf")
+            XCTAssertEqual(binaryField.value.count, 2797050)
+        } else {
+            XCTFail("Failed to parse multipart form data")
+        }
+    }
+
 }
