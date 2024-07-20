@@ -41,7 +41,7 @@ public struct FormData {
         return ret
     }
 
-    public static func parseMultipartFormData(from fileContent: Data) -> (boundary: String, formData: [FormData])? {
+    public static func parseMultipartFormData(from fileContent: Data, maxValueSize: ByteSize = .max) -> (boundary: String, formData: [FormData])? {
         let lines = processLines(in: fileContent)
 
         guard
@@ -59,6 +59,7 @@ public struct FormData {
         var currentContentType: String?
         var currentValue = Data()
         var state: ParserState = .readingHeaders
+        var valueIsTooLarge: Bool = false
 
         for line in lines.dropFirst() {
             if let lineString = String(data: Data(line), encoding: .utf8), lineString.hasPrefix("--\(boundary)") {
@@ -69,6 +70,7 @@ public struct FormData {
                         contentType: currentContentType,
                         value: currentValue))
                 }
+                valueIsTooLarge = false
                 currentName = nil
                 currentFilename = nil
                 currentContentType = nil
@@ -97,11 +99,15 @@ public struct FormData {
             } else if state == .startReadingValue {
                 currentValue.append(line)
                 state = .readingValue
-            } else if state == .readingValue {
+            } else if state == .readingValue, !valueIsTooLarge {
                 // Add line ending characters back if we have been parsing the value data
                 currentValue.append(UInt8(ascii: "\r"))
                 currentValue.append(UInt8(ascii: "\n"))
                 currentValue.append(line)
+            }
+            if currentValue.count > maxValueSize.rawValue {
+                valueIsTooLarge = true
+                currentValue = Data()
             }
         }
 
