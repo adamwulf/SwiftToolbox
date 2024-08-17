@@ -104,15 +104,16 @@ public struct FormData {
                 currentValue.append(line)
                 state = .readingValue
                 currentValueSize += line.byteSize
-            } else if state == .readingValue, !valueIsTooLarge {
-                // Add line ending characters back if we have been parsing the value data
-                currentValue.append(UInt8(ascii: "\r"))
-                currentValue.append(UInt8(ascii: "\n"))
-                currentValue.append(line)
+            } else if state == .readingValue {
+                if !valueIsTooLarge {
+                    // Add line ending characters back if we have been parsing the value data
+                    currentValue.append(UInt8(ascii: "\r"))
+                    currentValue.append(UInt8(ascii: "\n"))
+                    currentValue.append(line)
+                }
                 currentValueSize += line.byteSize + ByteSize.byte(2) // add the size of \r\n
             }
             if currentValue.count > maxValueSize.rawValue {
-                currentValueSize += line.byteSize + ByteSize.byte(2) // add the size of \r\n
                 valueIsTooLarge = true
                 currentValue = Data()
             }
@@ -130,7 +131,7 @@ public struct FormData {
 
         // Attempt to decode base64 if content type suggests binary data
         for i in 0..<formDataArray.count {
-            if let utf8String = String(data: formDataArray[i].value, encoding: .utf8) {
+            if !formDataArray[i].value.isEmpty, let utf8String = String(data: formDataArray[i].value, encoding: .utf8) {
                 let trimmedValue = utf8String.trimmingCharacters(in: .whitespacesAndNewlines)
                 if let decodedData = Data(base64Encoded: Data(trimmedValue.utf8)) {
                     formDataArray[i] = FormData(
