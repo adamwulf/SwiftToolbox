@@ -439,6 +439,7 @@ final class FormDataTests: XCTestCase {
             XCTAssertEqual(jsonField.name, "json_data")
             XCTAssertNil(jsonField.filename)
             XCTAssertEqual(String(data: jsonField.value, encoding: .utf8), "{\n  \"text\" : \"Test\"\n}")
+            XCTAssertEqual(jsonField.byteSize, .byte(21))
         } else {
             XCTFail("Failed to parse multipart form data")
         }
@@ -472,6 +473,7 @@ final class FormDataTests: XCTestCase {
             XCTAssertEqual(jsonField.name, "json_data")
             XCTAssertNil(jsonField.filename)
             XCTAssertEqual(String(data: jsonField.value, encoding: .utf8), "{\n  \"text\" : \"Test\"\n}")
+            XCTAssertEqual(jsonField.byteSize, .byte(21))
         } else {
             XCTFail("Failed to parse multipart form data")
         }
@@ -505,6 +507,7 @@ final class FormDataTests: XCTestCase {
             XCTAssertEqual(jsonField.name, "json_data")
             XCTAssertNil(jsonField.filename)
             XCTAssertEqual(String(data: jsonField.value, encoding: .utf8), "")
+            XCTAssertEqual(jsonField.byteSize, .byte(21))
         } else {
             XCTFail("Failed to parse multipart form data")
         }
