@@ -13,6 +13,7 @@ public struct FormData {
     public let filename: String?
     public let contentType: String?
     public let value: Data
+    public let byteSize: ByteSize
 
     enum ParserState {
         case readingHeaders
@@ -60,6 +61,7 @@ public struct FormData {
         var currentValue = Data()
         var state: ParserState = .readingHeaders
         var valueIsTooLarge: Bool = false
+        var currentValueSize: ByteSize = .zero
 
         for line in lines.dropFirst() {
             if let lineString = String(data: Data(line), encoding: .utf8), lineString.hasPrefix("--\(boundary)") {
@@ -68,8 +70,10 @@ public struct FormData {
                         name: name,
                         filename: currentFilename,
                         contentType: currentContentType,
-                        value: currentValue))
+                        value: currentValue,
+                        byteSize: currentValueSize))
                 }
+                currentValueSize = .zero
                 valueIsTooLarge = false
                 currentName = nil
                 currentFilename = nil
@@ -99,13 +103,16 @@ public struct FormData {
             } else if state == .startReadingValue {
                 currentValue.append(line)
                 state = .readingValue
+                currentValueSize += line.byteSize
             } else if state == .readingValue, !valueIsTooLarge {
                 // Add line ending characters back if we have been parsing the value data
                 currentValue.append(UInt8(ascii: "\r"))
                 currentValue.append(UInt8(ascii: "\n"))
                 currentValue.append(line)
+                currentValueSize += line.byteSize + ByteSize.byte(2) // add the size of \r\n
             }
             if currentValue.count > maxValueSize.rawValue {
+                currentValueSize += line.byteSize + ByteSize.byte(2) // add the size of \r\n
                 valueIsTooLarge = true
                 currentValue = Data()
             }
@@ -113,7 +120,12 @@ public struct FormData {
 
         // Add the last form data if any
         if let name = currentName {
-            formDataArray.append(FormData(name: name, filename: currentFilename, contentType: currentContentType, value: currentValue))
+            formDataArray.append(FormData(
+                name: name,
+                filename: currentFilename,
+                contentType: currentContentType,
+                value: currentValue,
+                byteSize: currentValueSize))
         }
 
         // Attempt to decode base64 if content type suggests binary data
@@ -125,7 +137,8 @@ public struct FormData {
                         name: formDataArray[i].name,
                         filename: formDataArray[i].filename,
                         contentType: formDataArray[i].contentType,
-                        value: decodedData)
+                        value: decodedData,
+                        byteSize: decodedData.byteSize)
                 }
             }
         }
