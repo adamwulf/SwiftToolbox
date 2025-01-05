@@ -116,9 +116,15 @@ public extension String {
         // First remove everything except alphanumerics and whitespace
         let filtered = self.unicodeScalars.filter { alphaWhitespaceChars.contains($0) }.map(String.init).joined()
         // Then replace whitespace with dashes
-        return filtered.trimmingCharacters(in: .whitespacesAndNewlines)
+        let normalized = filtered.trimmingCharacters(in: .whitespacesAndNewlines)
             .components(separatedBy: .whitespacesAndNewlines)
             .joined(separator: "-")
+        // Truncate to 255 chars, max length for macOS filenames
+        let maxLength = 255
+        guard normalized.count <= maxLength else {
+            return String(normalized.prefix(maxLength))
+        }
+        return normalized
     }
 
     /// Returns a new string made by removing from the end of the string all characters contained in a given character set.

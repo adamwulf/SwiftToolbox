@@ -438,6 +438,11 @@ final class SwiftToolboxTests: XCTestCase {
 
         let str2 = "😄 Fancy String"
         XCTAssertEqual(str2.filenameSafe, "Fancy-String")
+
+        // Test length truncation
+        let longString = String(repeating: "abcdefghij", count: 30) // 300 characters
+        XCTAssertEqual(longString.filenameSafe.count, 255)
+        XCTAssertTrue(longString.filenameSafe.hasPrefix("abcdefghij"))
     }
 
     func testFileExtension() {
