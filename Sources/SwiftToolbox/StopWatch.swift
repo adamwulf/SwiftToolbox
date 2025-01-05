@@ -45,7 +45,7 @@ public class StopWatch {
 
     /// Starts the stopwatch.
     public func start() {
-        synchronized(self) { () -> Void in
+        synchronized(self) { () in
             if !isRunning {
                 running = true
                 startTime = DispatchTime.now()
@@ -55,7 +55,7 @@ public class StopWatch {
 
     /// Resets the stopwatch.
     public func reset() {
-        synchronized(self) { () -> Void in
+        synchronized(self) { () in
             running = false
             duration = 0
             startTime = .distantFuture
