@@ -7,6 +7,8 @@
 
 import Foundation
 
+private let alphaWhitespaceChars = CharacterSet.alphanumerics.union(.whitespacesAndNewlines)
+
 /// An extension to the `String` class.
 public extension String {
     /// A computed property that returns the path extension of the string.
@@ -111,8 +113,12 @@ public extension String {
 
     /// Removes all non-alphanumeric characters, and replaces whitespace with `-`
     var filenameSafe: String {
-        return components(separatedBy: .whitespacesAndNewlines).joined(separator: "-")
-            .components(separatedBy: .alphanumerics.union(CharacterSet(charactersIn: "-")).inverted).joined()
+        // First remove everything except alphanumerics and whitespace
+        let filtered = self.unicodeScalars.filter { alphaWhitespaceChars.contains($0) }.map(String.init).joined()
+        // Then replace whitespace with dashes
+        return filtered.trimmingCharacters(in: .whitespacesAndNewlines)
+            .components(separatedBy: .whitespacesAndNewlines)
+            .joined(separator: "-")
     }
 
     /// Returns a new string made by removing from the end of the string all characters contained in a given character set.

@@ -433,8 +433,11 @@ final class SwiftToolboxTests: XCTestCase {
     }
 
     func testFilenameSafe() {
-        let str = "Fancy String  with!@#$123"
-        XCTAssertEqual(str.filenameSafe, "Fancy-String--with123")
+        let str1 = "Fancy String  with!@#$123"
+        XCTAssertEqual(str1.filenameSafe, "Fancy-String--with123")
+
+        let str2 = "😄 Fancy String"
+        XCTAssertEqual(str2.filenameSafe, "Fancy-String")
     }
 
     func testFileExtension() {
