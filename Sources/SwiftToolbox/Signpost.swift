@@ -56,6 +56,14 @@ public struct Signpost: Signpostable {
         return signpost?.id ?? OSSignpostID.null
     }
 
+    private var idContext: [String: UInt64] {
+        if #available(macOS 10.14, *) {
+            return ["id": id.rawValue]
+        } else {
+            return [:]
+        }
+    }
+
     /// Initializes a signpostable object with the given name.
     /// - Parameter name: The name of the signpost.
     public init(_ name: StaticString) {
@@ -88,12 +96,6 @@ public struct Signpost: Signpostable {
         let duration = stopwatch.stop()
         Self.queue.async {
             let level: SwiftToolbox.LogLevel = duration >= limit ? max(.warning, level ?? self.level) : (level ?? self.level)
-            let idContext: [String: Any]
-            if #available(macOS 10.14, *) {
-                idContext = ["id": id.rawValue]
-            } else {
-                idContext = [:]
-            }
             SwiftToolbox.log(level: level, message: "signpost", file: file, function: function, line: line, context: [
                 "name": name,
                 "status": "finished",
@@ -120,10 +122,15 @@ public struct Signpost: Signpostable {
                 idContext = [:]
             }
             self.eventDurations.tick(for: event, duration: duration)
-            let level: SwiftToolbox.LogLevel = duration >= limit ? max(.warning, level ?? self.level) : (level ?? self.level)
             let signpostCtx: [String: Any] = ["name": name, "event": event, "status": "running", "duration": duration].merging(idContext)
-            SwiftToolbox.log(level: level, message: "signpost", file: file, function: function, line: line, context: signpostCtx
-                .merging(context ?? [:]))
+            SwiftToolbox.log(
+                level: level ?? self.level,
+                message: "signpost",
+                file: file,
+                function: function,
+                line: line,
+                context: signpostCtx.merging(idContext).merging(context ?? [:])
+            )
         }
     }
 }
