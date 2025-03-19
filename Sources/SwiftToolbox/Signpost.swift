@@ -98,7 +98,7 @@ public struct Signpost: Signpostable {
                 "name": name,
                 "status": "finished",
                 "duration": duration
-            ].merging(idContext).merging(context ?? [:]).merging(eventDurations.values.isEmpty ? [:] : ["events": eventDurations.values]))
+            ].merging(idContext).merging(context ?? [:]).merging(eventDurations.values.isEmpty ? [:] : ["event": eventDurations.values]))
         }
     }
 
