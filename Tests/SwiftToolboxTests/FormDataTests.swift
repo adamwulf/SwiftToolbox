@@ -207,11 +207,11 @@ final class FormDataTests: XCTestCase {
 
         var fileContent = Data()
         let boundary = "--4250D4D6-2C1D-4602-A004-64D839E45169"
-        let headers = """
+        let headers = Data("""
         Content-Disposition: form-data; name="binary_data"; filename="example.png"\r
         Content-Type: image/png\r
 
-        """.data(using: .utf8)!
+        """.utf8)
 
         fileContent.append(Data(boundary.utf8))
         fileContent.append(Data("\r\n".utf8))

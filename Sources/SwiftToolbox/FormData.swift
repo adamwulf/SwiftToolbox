@@ -42,7 +42,10 @@ public struct FormData {
         return ret
     }
 
-    public static func parseMultipartFormData(from fileContent: Data, maxValueSize: ByteSize = .max) -> (boundary: String, formData: [FormData])? {
+    public static func parseMultipartFormData(
+        from fileContent: Data,
+        maxValueSize: ByteSize = .max
+    ) -> (boundary: String, formData: [FormData])? {
         let lines = processLines(in: fileContent)
 
         guard
