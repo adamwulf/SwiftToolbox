@@ -24,6 +24,14 @@ public protocol Signpostable {
     func emit(event: String, context: [String: Any]?, file: String, function: String, line: Int, level: SwiftToolbox.LogLevel?)
 }
 
+private class EventDurations {
+    private(set) var values: [[String: CGFloat]] = []
+
+    func tick(for event: String, duration: CGFloat) {
+        values.append([event: duration])
+    }
+}
+
 /// A struct that wraps the `Signpostable` protocol and provides a fallback for
 /// platforms that don't support `OSSignpost`.
 public struct Signpost: Signpostable {
@@ -35,6 +43,8 @@ public struct Signpost: Signpostable {
     /// The signpostable object.
     private let signpost: Signpostable?
     private let stopwatch: StopWatch
+    /// List of events and durations
+    private let eventDurations = EventDurations()
 
     /// The name of the signpost.
     public let name: StaticString
@@ -88,7 +98,7 @@ public struct Signpost: Signpostable {
                 "name": name,
                 "status": "finished",
                 "duration": duration
-            ].merging(idContext).merging(context ?? [:]))
+            ].merging(idContext).merging(context ?? [:]).merging(eventDurations.values.isEmpty ? [:] : ["events": eventDurations.values]))
         }
     }
 
@@ -109,6 +119,7 @@ public struct Signpost: Signpostable {
             } else {
                 idContext = [:]
             }
+            self.eventDurations.tick(for: event, duration: duration)
             let level: SwiftToolbox.LogLevel = duration >= limit ? max(.warning, level ?? self.level) : (level ?? self.level)
             let signpostCtx: [String: Any] = ["name": name, "event": event, "status": "running", "duration": duration].merging(idContext)
             SwiftToolbox.log(level: level, message: "signpost", file: file, function: function, line: line, context: signpostCtx
