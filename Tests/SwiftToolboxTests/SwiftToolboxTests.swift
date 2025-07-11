@@ -434,15 +434,40 @@ final class SwiftToolboxTests: XCTestCase {
 
     func testFilenameSafe() {
         let str1 = "Fancy String  with!@#$123"
-        XCTAssertEqual(str1.filenameSafe, "Fancy-String--with123")
+        XCTAssertEqual(str1.filenameSafe, "Fancy-String-with123")
 
         let str2 = "😄 Fancy String"
         XCTAssertEqual(str2.filenameSafe, "Fancy-String")
 
-        // Test length truncation
-        let longString = String(repeating: "abcdefghij", count: 30) // 300 characters
-        XCTAssertEqual(longString.filenameSafe.count, 255)
-        XCTAssertTrue(longString.filenameSafe.hasPrefix("abcdefghij"))
+        // Test Unicode mathematical alphanumerics (the reported error case)
+        let unicodeMath = "𝖊𝖉𝖉𝖎𝖊-𝖏𝖎𝖆𝖔-on-X-My-favorite-stacks-are-in-the-Biblioteca-Vasconcelos-in-Mexico-City-where-you-can-see-topics-" +
+            "laid-out-spatially-before-you-Nearer-information-is-immediately-accessible--farther-information-is-distant-but-still-in-your-line-of-s"
+        let safeName = unicodeMath.filenameSafe
+        // Unicode math characters should be stripped, leaving only the ASCII part
+        XCTAssertTrue(safeName.hasPrefix("on-X-My-favorite"))
+        XCTAssertTrue(safeName.count <= 200)
+        // Ensure no Unicode mathematical characters remain
+        XCTAssertFalse(safeName.contains("𝖊"))
+        XCTAssertFalse(safeName.contains("𝖉"))
+        // Should be truncated at word boundary
+        XCTAssertTrue(safeName.hasSuffix("information-is"))
+
+        // Test length truncation with word boundary preservation
+        let longString = String(repeating: "abcdefghij-", count: 30) // 330 characters
+        let truncated = longString.filenameSafe
+        XCTAssertTrue(truncated.count <= 200)
+        XCTAssertTrue(truncated.hasPrefix("abcdefghij"))
+        XCTAssertTrue(truncated.hasSuffix("abcdefghij"))  // Should end at word boundary
+
+        // Test empty string handling (original behavior: return empty string)
+        XCTAssertEqual("".filenameSafe, "")
+        XCTAssertEqual("!@#$%^&*()".filenameSafe, "")
+
+        // Test multiple whitespace collapse
+        XCTAssertEqual("test    multiple   spaces".filenameSafe, "test-multiple-spaces")
+
+        // Test Unicode emoji and symbols
+        XCTAssertEqual("🚀 Project ★ Name 🎉".filenameSafe, "Project-Name")
     }
 
     func testFileExtension() {

@@ -7,7 +7,17 @@
 
 import Foundation
 
-private let alphaWhitespaceChars = CharacterSet.alphanumerics.union(.whitespacesAndNewlines)
+private let safeFilenameChars: CharacterSet = {
+    // Only allow basic ASCII alphanumerics (a-z, A-Z, 0-9), dashes, and whitespace
+    // This excludes Unicode mathematical alphanumerics and other problematic characters
+    var charset = CharacterSet()
+    charset.formUnion(CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz"))
+    charset.formUnion(CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
+    charset.formUnion(CharacterSet(charactersIn: "0123456789"))
+    charset.formUnion(CharacterSet(charactersIn: "-"))  // Allow dashes
+    charset.formUnion(.whitespacesAndNewlines)
+    return charset
+}()
 
 /// An extension to the `String` class.
 public extension String {
@@ -112,19 +122,34 @@ public extension String {
     }
 
     /// Removes all non-alphanumeric characters, and replaces whitespace with `-`
+    /// Only allows basic ASCII alphanumerics (a-z, A-Z, 0-9) to ensure compatibility
+    /// with all filesystems and avoid Unicode filename issues.
     var filenameSafe: String {
-        // First remove everything except alphanumerics and whitespace
-        let filtered = self.unicodeScalars.filter { alphaWhitespaceChars.contains($0) }.map(String.init).joined()
-        // Then replace whitespace with dashes
+        // First remove everything except safe ASCII alphanumerics and whitespace
+        let filtered = self.unicodeScalars.filter { safeFilenameChars.contains($0) }.map(String.init).joined()
+        // Then replace whitespace with dashes and collapse multiple dashes
         let normalized = filtered.trimmingCharacters(in: .whitespacesAndNewlines)
             .components(separatedBy: .whitespacesAndNewlines)
+            .filter { !$0.isEmpty }  // Remove empty components
             .joined(separator: "-")
-        // Truncate to 255 chars, max length for macOS filenames
-        let maxLength = 255
-        guard normalized.count <= maxLength else {
-            return String(normalized.prefix(maxLength))
+            .replacingOccurrences(of: "-+", with: "-", options: .regularExpression)  // Collapse multiple dashes
+            .trimmingCharacters(in: CharacterSet(charactersIn: "-"))  // Remove leading/trailing dashes
+
+        // Truncate to a conservative length for cross-platform compatibility
+        // Many filesystems support 255 bytes, but we'll use 200 characters to be safe
+        // since some Unicode characters can be multiple bytes
+        let maxLength = 200
+        guard normalized.count > maxLength else {
+            return normalized
         }
-        return normalized
+
+        // Truncate at word boundary if possible
+        let truncated = String(normalized.prefix(maxLength))
+        if let lastDash = truncated.lastIndex(of: "-"), lastDash != truncated.startIndex {
+            return String(truncated[..<lastDash])
+        }
+
+        return truncated
     }
 
     /// Returns a new string made by removing from the end of the string all characters contained in a given character set.
